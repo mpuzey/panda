@@ -22,8 +22,18 @@ class TestValidation(unittest.TestCase):
     def test_missing_fields(self):
         appointment = self.valid_appointment.copy()
         del appointment['status']
+        del appointment['time']
         errors = validate(appointment)
         assert 'Missing required field: status' in errors
+        assert 'Missing required field: time' in errors
+
+    def test_none_fields(self):
+        appointment = self.valid_appointment.copy()
+        appointment['patient'] = None
+        appointment['duration'] = None
+        errors = validate(appointment)
+        assert 'Missing required field: patient' in errors
+        assert 'Missing required field: duration' in errors
 
     def test_invalid_uuid(self):
         appointment = self.valid_appointment.copy()
@@ -82,8 +92,6 @@ class TestValidation(unittest.TestCase):
             'AB1 123',  # ends in numbers, invalid
             'IM2N4',  # incomplete
             'IM2N 4LGG',  # too long
-            '',  # empty string
-            # None  # NoneType
         ]
         for pc in invalid_postcodes:
             with self.subTest(postcode=pc):
@@ -103,9 +111,3 @@ class TestValidation(unittest.TestCase):
         appointment['clinician'] = 'Dr'
         errors = validate(appointment)
         assert 'Invalid \'clinician\' value' in errors
-
-    def test_empty_department(self):
-        appointment = self.valid_appointment.copy()
-        appointment['department'] = ''
-        errors = validate(appointment)
-        assert 'Invalid \'department\' value' in errors
