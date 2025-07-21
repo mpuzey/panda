@@ -25,9 +25,8 @@ def validate(patient):
     return errors
 
 
-"""
-https://www.datadictionary.nhs.uk/attributes/nhs_number.html
-"""
+# TODO: Ensure that all NHS numbers are checksum validated.
+# https://www.datadictionary.nhs.uk/attributes/nhs_number.html
 def validate_nhs_number(value):
     if not re.fullmatch(r'\d{10}', str(value)):
         return ["Invalid NHS number. Must be a 10-digit number"]
@@ -49,7 +48,7 @@ def validate_date_of_birth(value):
     except (ValueError, TypeError):
         return ['Invalid date format for date_of_birth. Expected \'YYYY-MM-DD\'']
 
-
+# https://ideal-postcodes.co.uk/guides/uk-postcode-format
 def validate_postcode(value):
     if not isinstance(value, str):
         return ['Invalid UK postcode format']

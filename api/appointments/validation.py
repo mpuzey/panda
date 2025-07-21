@@ -73,6 +73,7 @@ def validate_location(appointment, errors):
         errors.append('Missing postcode')
         return errors
 
+    # https://ideal-postcodes.co.uk/guides/uk-postcode-format
     if not re.match(UK_POSTCODE_VALIDATION_REGEX, postcode, re.IGNORECASE):
         errors.append('Invalid UK postcode format')
 

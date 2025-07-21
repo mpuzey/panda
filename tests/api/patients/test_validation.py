@@ -77,3 +77,7 @@ class TestValidatePatientData(unittest.TestCase):
                 data['postcode'] = pc
                 errors = validate(data)
                 self.assertEqual(errors, [])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -21,21 +21,18 @@ curl http://localhost:8889/api/patients/
 
 ### Fetching a single patient
 ```
-curl http://localhost:8889/api/patients/<nhs_number>
-```
-e.g.
-```
 curl http://localhost:8889/api/patients/1373645350
 ```
 
 ### Create a new patient
 ```
- curl -X POST http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+curl -X POST http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
-### Delete a patient
-
-###
+### Deleting a patient
+```
+curl -X DELETE http://localhost:8889/api/patients/1373645350
+```
 
 
 ### Fetching all appointments 
@@ -43,16 +40,25 @@ curl http://localhost:8889/api/patients/1373645350
 curl http://localhost:8889/api/appointments/
 ```
 
-### Fetching a single patient
+### Fetching a single appointment
 ```
 curl http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
+### Creating an appointment 
+```
+
+```
+
+### Deleting an appointment
+```
+curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
+```
+
 ### Running the unit tests
 
-TODO: Why does this not work as in the IDE?
 ```
-python -m unittest discover .
+python3 -m unittest discover tests/api
 ```
 
 ### Running the integration tests

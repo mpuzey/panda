@@ -1,11 +1,9 @@
-import json
-
 import tornado
 
-from api.appointment_handler import AppointmentHandler
-from api.appointments_handler import AppointmentsHandler
-from api.patient_handler import PatientHandler
-from api.patients_handler import PatientsHandler
+from api.appointments.appointment_handler import AppointmentHandler
+from api.appointments.appointments_handler import AppointmentsHandler
+from api.patients.patient_handler import PatientHandler
+from api.patients.patients_handler import PatientsHandler
 
 
 def start_server():
@@ -22,7 +20,7 @@ def start_app():
     return tornado.web.Application([
         (r'/api/patients/([0-9]+)', PatientHandler),
         (r'/api/patients/', PatientsHandler),
-        (r'/api/appointments/([0-9]+)', AppointmentHandler),
+        (r'/api/appointments/([a-f0-9\-]{36})', AppointmentHandler),
         (r'/api/appointments/', AppointmentsHandler)
     ])
 

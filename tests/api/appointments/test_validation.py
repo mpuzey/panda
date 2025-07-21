@@ -111,3 +111,7 @@ class TestValidation(unittest.TestCase):
         appointment['clinician'] = 'Dr'
         errors = validate(appointment)
         assert 'Invalid \'clinician\' value' in errors
+
+
+if __name__ == '__main__':
+    unittest.main()
