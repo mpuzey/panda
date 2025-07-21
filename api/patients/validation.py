@@ -8,25 +8,21 @@ def validate(patient):
     errors = []
 
     required_fields = ['nhs_number', 'name', 'date_of_birth', 'postcode']
-    errors.extend(validate_required_fields(patient, required_fields))
 
-    if not patient.get('nhs_number'):
-        errors.extend(validate_nhs_number(patient['nhs_number']))
+    errors.extend([f'Missing required field: {field}' for field in required_fields if not patient.get(field)])
+    if errors:
+        print('Invalid appointment:', errors)
+        return errors
 
-    if not patient.get('name'):
-        errors.extend(validate_name(patient['name']))
+    errors.extend(validate_nhs_number(patient['nhs_number']))
+    errors.extend(validate_name(patient['name']))
+    errors.extend(validate_date_of_birth(patient['date_of_birth']))
+    errors.extend(validate_postcode(patient['postcode']))
 
-    if not patient.get('date_of_birth'):
-        errors.extend(validate_date_of_birth(patient['date_of_birth']))
-
-    if not patient.get('postcode'):
-        errors.extend(validate_postcode(patient['postcode']))
+    if errors:
+        print('Invalid appointment:', errors)
 
     return errors
-
-
-def validate_required_fields(patient, fields):
-    return [f'Missing required field: {field}' for field in fields if not patient.get(field)]
 
 
 """
@@ -57,7 +53,6 @@ def validate_date_of_birth(value):
 def validate_postcode(value):
     if not isinstance(value, str):
         return ['Invalid UK postcode format']
-    pattern = UK_POSTCODE_VALIDATION_REGEX
-    if not re.match(pattern, value.strip(), re.IGNORECASE):
+    if not re.match(UK_POSTCODE_VALIDATION_REGEX, value.strip(), re.IGNORECASE):
         return ['Invalid UK postcode format']
     return []

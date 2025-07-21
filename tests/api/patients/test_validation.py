@@ -33,7 +33,7 @@ class TestValidatePatientData(unittest.TestCase):
                 assert any('Missing required field' in e or 'Invalid' in e for e in errors)
 
     def test_invalid_nhs_number(self):
-        invalid_numbers = ['abc123', '123', '12345678901', '', '000000000']
+        invalid_numbers = ['abc123', '123', '12345678901', '000000000']
         for nhs in invalid_numbers:
             with self.subTest(nhs_number=nhs):
                 data = self.valid_patient.copy()
@@ -61,7 +61,7 @@ class TestValidatePatientData(unittest.TestCase):
     #             assert 'Invalid date format for date_of_birth. Expected \'YYYY-MM-DD\'' in errors
 
     def test_invalid_postcode(self):
-        invalid_postcodes = ['12345', 'ABC123', '', 'N6-2FA', 'N62FAAA', None]
+        invalid_postcodes = ['12345', 'ABC123', 'N6-2FA', 'N62FAAA']
         for pc in invalid_postcodes:
             with self.subTest(postcode=pc):
                 data = self.valid_patient.copy()

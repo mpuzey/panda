@@ -10,4 +10,4 @@ class AppointmentsHandler(BaseHandler):
             self.appointments = json.load(outfile)
 
     def get(self):
-        self.write({'patients': self.appointments})
+        self.write({'appointments': self.appointments})
