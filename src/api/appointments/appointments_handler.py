@@ -1,6 +1,6 @@
 import json
 
-from api.base_handler import BaseHandler
+from src.api.base_handler import BaseHandler
 from constants import ROOT_PATH, EXAMPLE_APPOINTMENTS_FILENAME
 
 

@@ -1,17 +1,23 @@
-# PANDA
+# PANDA - Patient Appointment Network Data Application
+
+The Patient Appointment Network Data Application, or simply, - PANDA is a POC for a appointment booking services for NHS and private patients.  
 
 ### Install instructions
 
-Native setup - Mac OS: 
+Note that Docker is required to run a local instance of mongodb. The application itself can be run inside or outside of
+Docker for ease of local development. 
+
+### With Docker only: 
+TODO: Add Dockerfile and install 
+```
+./run.sh all
+``` 
+
+### Native setup - Mac OS: 
 ```
 brew install Python 3.9
 pip3 install -r requirements.txt
-```
-
-# TODO: Add Dockerfile and install 
-With Docker: 
-```
-
+python3 main.py
 ```
 
 ### Fetching all patients
@@ -67,5 +73,14 @@ python3 -m unittest discover tests/api
 ```
 
 ### Requirements
+Here is the list of requirements for this POC:
 https://github.com/airelogic/tech-test-portal/tree/main/Patient-Appointment-Backend#application-requirements
+
+### TODOs
+There are a number of TODOs scattered throughout this project around further iterations of this implementation. These include,
+but are not limited to, the following:  
+* Further integration tests
+* Terraform code around an AWS deployment of the PANDA system
+* Proper mod 10 checks around NHS number 
+* 
  

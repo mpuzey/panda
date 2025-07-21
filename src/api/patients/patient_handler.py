@@ -1,8 +1,8 @@
 import json
 
-from api.base_handler import BaseHandler
+from src.api.base_handler import BaseHandler
 from constants import ROOT_PATH, EXAMPLE_PATIENTS_FILENAME
-from api.patients.validation import validate
+from src.api.patients.validation import validate
 
 
 class PatientHandler(BaseHandler):

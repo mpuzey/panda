@@ -1,14 +1,14 @@
 import tornado
 
-from api.appointments.appointment_handler import AppointmentHandler
-from api.appointments.appointments_handler import AppointmentsHandler
-from api.patients.patient_handler import PatientHandler
-from api.patients.patients_handler import PatientsHandler
+from src.api.appointments.appointment_handler import AppointmentHandler
+from src.api.appointments.appointments_handler import AppointmentsHandler
+from src.api.patients.patient_handler import PatientHandler
+from src.api.patients.patients_handler import PatientsHandler
 
 
 def start_server():
     app = start_app()
-    app.listen(8889)
+    app.listen(8889, address='0.0.0.0')
     tornado.ioloop.IOLoop.current().start()
 
 
