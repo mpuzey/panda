@@ -6,7 +6,7 @@ from src.api.appointments.validation import validate
 
 
 class AppointmentHandler(BaseHandler):
-    def initialize(self):
+    def initialize(self, db_client):
         with open(ROOT_PATH + EXAMPLE_APPOINTMENTS_FILENAME, 'r') as outfile:
             self.appointments = json.load(outfile)
 
