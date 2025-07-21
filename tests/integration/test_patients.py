@@ -1,6 +1,4 @@
 import json
-import uuid
-import tornado.web
 import tornado.testing
 from tornado.testing import AsyncHTTPTestCase
 from main import start_app
@@ -24,6 +22,8 @@ class PatientHandlerTests(AsyncHTTPTestCase):
             'postcode': 'N6 2FA'
         }
         self.assertEqual(body, expected_patient)
+
+    # TODO: add integration tests around post and delete
 
 
 if __name__ == '__main__':

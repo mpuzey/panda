@@ -1,6 +1,5 @@
 import json
 import uuid
-import tornado.web
 import tornado.testing
 from tornado.testing import AsyncHTTPTestCase
 from main import start_app
@@ -40,6 +39,8 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         response = self.fetch(f'/api/appointments/{unregistered_uuid}')
 
         self.assertIn(response.code, [200, 404])
+
+    # TODO: add integration tests around post and delete
 
 
 if __name__ == '__main__':
