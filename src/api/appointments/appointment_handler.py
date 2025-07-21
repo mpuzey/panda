@@ -1,34 +1,47 @@
 import json
 
 from src.api.base_handler import BaseHandler
-from constants import ROOT_PATH, EXAMPLE_APPOINTMENTS_FILENAME
 from src.api.appointments.validation import validate
+from src.db.mongo import MongoDB
 
 
 class AppointmentHandler(BaseHandler):
     def initialize(self, db_client):
-        with open(ROOT_PATH + EXAMPLE_APPOINTMENTS_FILENAME, 'r') as outfile:
-            self.appointments = json.load(outfile)
+        self.db = MongoDB(db_client, 'appointments')
 
     def get(self, id):
-        for appointment in self.appointments:
-            if appointment['id'] == id:
-                self.write(appointment)
-                return
+        result = self.db.get({'id': id})
+        if not result:
+            self.write({'error': 'appointment not found'})
+            return
+
+        self.write({'patient': result.get('patient'),
+                    'status': result.get('status'),
+                    'time': result.get('time'),
+                    'duration': result.get('duration'),
+                    'clinician': result.get('clinician'),
+                    'department': result.get('department'),
+                    'postcode': result.get('postcode'),
+                    'id': result.get('id')
+                    })
+        return
 
     def post(self, _):
         appointment = json.loads(self.request.body)
         errors = validate(appointment)
         if errors:
-            self.write({'errors': errors})
+            self.write_error(400, errors)
             return
 
-        self.appointments.append(appointment)
-        self.write({'message': 'new appointment added:' + json.dumps(appointment)})
+        result = self.db.create(appointment)
+        if not result.acknowledged:
+            self.write({'error': 'could not create appointment'})
+            return
+
+        self.write({'message': 'new appointment added:' + appointment.get('id')})
+        return
 
     def delete(self, id):
-        for appointment in self.appointments:
-            if appointment['id'] == id:
-                del self.appointments[appointment]
-                self.write({'message': 'appointment' + id + 'deleted'})
-                return
+        self.db.update({'id': id}, {'status': 'cancelled'})
+        self.write({'message': 'appointment' + id + 'deleted'})
+        return
