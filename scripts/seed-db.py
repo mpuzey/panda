@@ -4,7 +4,7 @@ import json
 from constants import ROOT_PATH, EXAMPLE_APPOINTMENTS_FILENAME, EXAMPLE_PATIENTS_FILENAME
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["mydatabase"]
+db = client["panda"]
 
 
 def seed_appointments():

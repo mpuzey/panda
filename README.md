@@ -2,18 +2,19 @@
 
 The Patient Appointment Network Data Application, or simply, - PANDA is a POC for a appointment booking services for NHS and private patients.  
 
-### Install instructions
+### Setup instructions
 
 Note that Docker is required to run a local instance of mongodb. The application itself can be run inside or outside of
 Docker for ease of local development. 
 
 ### With Docker only: 
-TODO: Add Dockerfile and install 
 ```
-./run.sh all
+./scripts/run.sh all
+python3 ./scripts/seed-db.py
 ``` 
 
 ### Native setup - Mac OS: 
+TODO: complete instructions for setup without dockerised app 
 ```
 brew install Python 3.9
 pip3 install -r requirements.txt
@@ -59,6 +60,19 @@ curl http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ### Deleting an appointment
 ```
 curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
+```
+
+
+### Inspecting the db 
+Assumes the db is already running and seeded (see Setup instructions):
+```
+docker exec -it mongodb bash
+
+mongosh
+use panda
+show colletions
+db.patients.find()
+db.appointments.find()
 ```
 
 ### Running the unit tests
