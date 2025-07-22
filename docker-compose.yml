@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  panda:
+    build:
+       context: .
+       dockerfile: Dockerfile
+    image: panda:latest
+    restart: always
+    environment:
+      MONGO_URI: "mongodb://mongo:27017/"
+      PORT: "8889"
+    ports:
+      - "8889:8889"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongodb/mongodb-community-server:latest
+    restart: always 
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
