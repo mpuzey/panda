@@ -1,13 +1,17 @@
 import json
-
 from src.api.base_handler import BaseHandler
-from constants import ROOT_PATH, EXAMPLE_APPOINTMENTS_FILENAME
+from src.db.mongo import MongoDB
+from bson.json_util import dumps as bson_dumps
 
 
 class AppointmentsHandler(BaseHandler):
-    def initialize(self):
-        with open(ROOT_PATH + EXAMPLE_APPOINTMENTS_FILENAME, 'r') as outfile:
-            self.appointments = json.load(outfile)
+    def initialize(self, db_client):
+        self.db = MongoDB(db_client, 'appointments')
 
     def get(self):
-        self.write({'appointments': self.appointments})
+        appointments = self.db.getAll()
+        appointments_bson_string = bson_dumps(appointments)
+        # TODO: clean up by stripping bson fields
+        appointments_json = json.loads(appointments_bson_string)
+        self.write({'appointments': appointments_json})
+

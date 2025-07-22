@@ -21,7 +21,6 @@ class PatientHandler(BaseHandler):
             'date_of_birth': result.get('date_of_birth'),
             'postcode': result.get('postcode')
         })
-        return
 
     def post(self, _):
         patient = json.loads(self.request.body)
@@ -36,9 +35,7 @@ class PatientHandler(BaseHandler):
             return
 
         self.write({'message': 'new patient added:' + patient.get('nhs_number')})
-        return
 
     def delete(self, nhs_number):
         self.db.delete({'nhs_number': nhs_number})
         self.write({'message': 'patient' + nhs_number + 'deleted'})
-        return

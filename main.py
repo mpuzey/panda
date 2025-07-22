@@ -22,9 +22,9 @@ def start_app():
 
     return tornado.web.Application([
         (r'/api/patients/([0-9]+)', PatientHandler, {'db_client': db_client}),
-        # (r'/api/patients/', PatientsHandler,  {'db_client': db_client}),
+        (r'/api/patients/', PatientsHandler,  {'db_client': db_client}),
         (r'/api/appointments/([a-f0-9\-]{36})', AppointmentHandler,  {'db_client': db_client}),
-        # (r'/api/appointments/', AppointmentsHandler,  {'db_client': db_client})
+        (r'/api/appointments/', AppointmentsHandler,  {'db_client': db_client})
     ])
 
 

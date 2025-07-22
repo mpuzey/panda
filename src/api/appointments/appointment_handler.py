@@ -24,7 +24,6 @@ class AppointmentHandler(BaseHandler):
                     'postcode': result.get('postcode'),
                     'id': result.get('id')
                     })
-        return
 
     def post(self, _):
         appointment = json.loads(self.request.body)
@@ -39,9 +38,7 @@ class AppointmentHandler(BaseHandler):
             return
 
         self.write({'message': 'new appointment added:' + appointment.get('id')})
-        return
 
     def delete(self, id):
         self.db.update({'id': id}, {'status': 'cancelled'})
         self.write({'message': 'appointment' + id + 'cancelled'})
-        return
