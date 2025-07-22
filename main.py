@@ -18,7 +18,6 @@ def start_app():
     """ This function returns an Application instance loaded with the necessary request handlers
     for the app.
     """
-    print('MONGODB_URI!!!!!--------' + MONGODB_URI)
     db_client = pymongo.MongoClient(MONGODB_URI)
 
     return tornado.web.Application([

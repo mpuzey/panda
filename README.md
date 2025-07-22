@@ -7,18 +7,21 @@ The Patient Appointment Network Data Application, or simply, - PANDA is a POC fo
 Note that Docker is required to run a local instance of mongodb. The application itself can be run inside or outside of
 Docker for ease of local development. 
 
-### With Docker only: 
+### With Docker: 
+Built on docker Desktop 4.24.2 - requires 4.24.2 or later.
 ```
-./scripts/run.sh all
-python3 ./scripts/seed-db.py
+docker-compose up
 ``` 
 
 ### Native setup - Mac OS: 
-TODO: complete instructions for setup without dockerised app 
+TODO: complete instructions for setup without dockerised app: 
 ```
 brew install Python 3.9
 pip3 install -r requirements.txt
 python3 main.py
+
+# In a new tab:
+./run.sh db
 ```
 
 ### Fetching all patients
@@ -83,7 +86,7 @@ python3 -m unittest discover tests/api
 
 ### Running the integration tests
 ```
-
+python3 -m unittest discover tests/integration
 ```
 
 ### Requirements
@@ -96,5 +99,4 @@ but are not limited to, the following:
 * Further integration tests
 * Terraform code around an AWS deployment of the PANDA system
 * Proper mod 10 checks around NHS number 
-* 
  

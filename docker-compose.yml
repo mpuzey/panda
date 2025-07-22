@@ -15,17 +15,26 @@ services:
       - "8889:8889"
     depends_on:
       - mongo
+      - seed
 
   mongo:
     image: mongodb/mongodb-community-server:latest
-    restart: always 
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: example
+    restart: always
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: panda:latest
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: "mongodb://mongo:27017/"
+    command: ["python3", "-u", "src/db/seed.py"]
 
 volumes:
   mongo_data:

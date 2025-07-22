@@ -1,9 +1,13 @@
 import pymongo
 import json
+import os
 
-from constants import ROOT_PATH, EXAMPLE_APPOINTMENTS_FILENAME, EXAMPLE_PATIENTS_FILENAME
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
+EXAMPLE_PATIENTS_FILENAME = "example_patients.json"
+EXAMPLE_APPOINTMENTS_FILENAME = 'example_appointments.json'
+MONGODB_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient(MONGODB_URI)
 db = client["panda"]
 
 
