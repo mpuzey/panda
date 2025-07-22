@@ -83,6 +83,7 @@ python3 -m unittest discover tests/api
 ```
 
 ### Running the integration tests
+Note that mongodb must be running for these tests to pass (see Native Panda setup - Mac OS)
 ```
 python3 -m unittest discover tests/integration
 ```

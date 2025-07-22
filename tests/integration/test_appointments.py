@@ -40,7 +40,32 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
         self.assertIn(response.code, [200, 404])
 
-    # TODO: add integration tests around post and delete
+    def test_post_appointment_creates_appointment(self):
+        new_appointment = {
+            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b9',
+            'patient': '0443743460',
+            'status': 'active',
+            'time': '2024-08-30T11:30:00+01:00',
+            'duration': '2h',
+            'clinician': 'Glenn Palmer',
+            'department': 'oncology',
+            'postcode': 'HD36 0HQ'
+        }
+
+        response = self.fetch(
+            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9',
+            method='POST',
+            body=json.dumps(new_appointment),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        self.assertEqual(response.code, 201)
+        body = json.loads(response.body)
+
+        expected_body = {'message': 'new appointment added:ac9729b5-5e11-42b4-87e2-6396b4faf1b9'}
+        self.assertEqual(body, expected_body)
+
+    # TODO: add integration tests around delete and update
 
 
 if __name__ == '__main__':

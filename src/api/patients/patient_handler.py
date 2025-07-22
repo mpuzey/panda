@@ -34,6 +34,7 @@ class PatientHandler(BaseHandler):
             self.write({'error': 'could not create patient'})
             return
 
+        self.set_status(201)
         self.write({'message': 'new patient added:' + patient.get('nhs_number')})
 
     def delete(self, nhs_number):

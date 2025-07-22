@@ -37,6 +37,7 @@ class AppointmentHandler(BaseHandler):
             self.write({'error': 'could not create appointment'})
             return
 
+        self.set_status(201)
         self.write({'message': 'new appointment added:' + appointment.get('id')})
 
     def delete(self, id):

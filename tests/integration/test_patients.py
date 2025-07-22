@@ -23,7 +23,28 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         }
         self.assertEqual(body, expected_patient)
 
-    # TODO: add integration tests around post and delete
+    def test_post_appointment_creates_appointment(self):
+        new_patient = {
+            'nhs_number': '1373645350',
+            'name': 'Dr Glenn Clark',
+            'date_of_birth': '1996-02-01',
+            'postcode': 'N6 2FA'
+        }
+
+        response = self.fetch(
+            f'/api/patients/1373645350',
+            method='POST',
+            body=json.dumps(new_patient),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        self.assertEqual(response.code, 201)
+        body = json.loads(response.body)
+
+        expected_body = {'message': 'new patient added:1373645350'}
+        self.assertEqual(body, expected_body)
+
+    # TODO: add integration tests around delete and update
 
 
 if __name__ == '__main__':
