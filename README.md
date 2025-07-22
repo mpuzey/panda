@@ -9,14 +9,15 @@ Docker for ease of local development.
 
 ### With Docker: 
 Built on Docker Desktop 4.24.2 - requires 4.24.2 or later.
+
 https://docs.docker.com/desktop/setup/install/mac-install/
 
 If you run into issues here is the exact version of Docker panda was built on:
 * Docker Desktop 4.24.2 - Intel (x86_64):
-* https://desktop.docker.com/mac/main/amd64/124339/Docker.dmg
+  https://desktop.docker.com/mac/main/amd64/124339/Docker.dmg
 
 * Docker Desktop 4.24.2 - Apple Silicon (ARM64):
-* https://desktop.docker.com/mac/main/arm64/124339/Docker.dmg
+  https://desktop.docker.com/mac/main/arm64/124339/Docker.dmg
 
 
 ```
