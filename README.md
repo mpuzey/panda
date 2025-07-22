@@ -21,6 +21,9 @@ pip3 install -r requirements.txt
 ./run.sh db
 python3 main.py
 ```
+If you are on another OS, ignore the brew command and install python3, if not already, using your favourite package manager.
+The run.sh is bash only so will not be runnable on Windows without Cygwin. For simplicity, if you are on windows use the
+ docker-compose setup only.
 
 ## Using the API
 
