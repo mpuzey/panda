@@ -2,7 +2,7 @@
 
 The Patient Appointment Network Data Application, or simply, - PANDA is a POC for a appointment booking services for NHS and private patients.  
 
-### Setup instructions
+## Setup instructions
 
 Note that Docker is required to run a local instance of mongodb. The application itself can be run inside or outside of
 Docker for ease of local development. 
@@ -21,6 +21,8 @@ pip3 install -r requirements.txt
 ./run.sh db
 python3 main.py
 ```
+
+## Using the API
 
 ### Fetching all patients
 (alternatively, you run the integration tests, see "Running the integration tests")
@@ -74,8 +76,7 @@ curl -X PUT http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b
 curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
-
-### Inspecting the db 
+## Inspecting the db 
 Assumes the db is already running andsee ded (see "Setup instructions"):
 ```
 docker exec -it mongodb bash
@@ -86,6 +87,8 @@ show colletions
 db.patients.find()
 db.appointments.find()
 ```
+
+## Testing the API
 
 ### Running the unit tests
 
@@ -99,7 +102,7 @@ Note that mongodb must be running for these tests to pass (see "Native Panda set
 python3 -m unittest discover tests/integration
 ```
 
-### Requirements
+## Requirements
 Here is the list of requirements for this POC:
 https://github.com/airelogic/tech-test-portal/tree/main/Patient-Appointment-Backend#application-requirements
 
@@ -135,7 +138,7 @@ As you've worked with the client for a while, you have an awareness of some past
 * The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌
 * The client would like to ensure that patient names can be represented correctly, in line with GDPR. ❌
 
-### TODOs
+## TODOs
 There are a number of TODOs scattered throughout this project around further iterations of this implementation. These include,
 but are not limited to, the following:  
 * Further integration tests
