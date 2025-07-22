@@ -54,7 +54,7 @@ curl http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 
 ### Creating an appointment 
 ```
-
+curl -X POST http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
 ### Deleting an appointment

@@ -43,5 +43,5 @@ class AppointmentHandler(BaseHandler):
 
     def delete(self, id):
         self.db.update({'id': id}, {'status': 'cancelled'})
-        self.write({'message': 'appointment' + id + 'deleted'})
+        self.write({'message': 'appointment' + id + 'cancelled'})
         return

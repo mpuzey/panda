@@ -49,8 +49,8 @@ def validate_details(appointment, errors):
             errors.append('Invalid format for \'duration\' (expected formats like \'1h\' or \'30m\')')
 
     if 'status' in appointment:
-        if appointment['status'] not in ['active', 'inactive', 'pending']:
-            errors.append('Invalid \'status\' value. Allowed: \'active\', \'inactive\', \'pending\'')
+        if appointment['status'] not in ['active', 'attended', 'cancelled', 'missed']:
+            errors.append('Invalid \'status\' value. Allowed: \'active\', \'attended\', \'cancelled\', \'missed\'')
 
     return errors
 

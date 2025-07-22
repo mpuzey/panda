@@ -57,7 +57,7 @@ class TestValidation(unittest.TestCase):
         appointment = self.valid_appointment.copy()
         appointment['status'] = 'closed'
         errors = validate(appointment)
-        assert 'Invalid \'status\' value. Allowed: \'active\', \'inactive\', \'pending\'' in errors
+        assert 'Invalid \'status\' value. Allowed: \'active\', \'attended\', \'cancelled\', \'missed\'' in errors
 
     def test_invalid_postcode(self):
         appointment = self.valid_appointment.copy()
