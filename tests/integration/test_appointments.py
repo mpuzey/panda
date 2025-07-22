@@ -42,7 +42,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
     def test_post_appointment_creates_appointment(self):
         new_appointment = {
-            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b9',
+            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
             'patient': '0443743460',
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
@@ -53,7 +53,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         }
 
         response = self.fetch(
-            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9',
+            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
             method='POST',
             body=json.dumps(new_appointment),
             headers={'Content-Type': 'application/json'}
@@ -62,10 +62,35 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         self.assertEqual(response.code, 201)
         body = json.loads(response.body)
 
-        expected_body = {'message': 'new appointment added:ac9729b5-5e11-42b4-87e2-6396b4faf1b9'}
+        expected_body = {'message': 'new appointment added: ac9729b5-5e11-42b4-87e2-6396b4faf1b1'}
         self.assertEqual(body, expected_body)
 
-    # TODO: add integration tests around delete and update
+    def test_put_appointment_updates_appointment(self):
+        new_appointment = {
+            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            'patient': '0443743460',
+            'status': 'active',
+            'time': '2024-08-30T11:30:00+01:00',
+            'duration': '2h',
+            'clinician': 'Glenn Close',  # <-- update
+            'department': 'oncology',
+            'postcode': 'HD36 0HQ'
+        }
+
+        response = self.fetch(
+            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            method='PUT',
+            body=json.dumps(new_appointment),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        self.assertEqual(response.code, 200)
+        body = json.loads(response.body)
+
+        expected_body = {'message': 'appointment updated: ac9729b5-5e11-42b4-87e2-6396b4faf1b1'}
+        self.assertEqual(body, expected_body)
+
+    # TODO: add integration tests around delete
 
 
 if __name__ == '__main__':

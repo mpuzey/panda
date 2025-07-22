@@ -35,7 +35,22 @@ class PatientHandler(BaseHandler):
             return
 
         self.set_status(201)
-        self.write({'message': 'new patient added:' + patient.get('nhs_number')})
+        self.write({'message': 'new patient added: ' + patient.get('nhs_number')})
+
+    def put(self, nhs_number):
+        patient = json.loads(self.request.body)
+        errors = validate(patient)
+        if errors:
+            self.write_error(400, errors)
+            return
+
+        result = self.db.update({'nhs_number': nhs_number}, patient)
+        if not result.acknowledged:
+            self.write({'error': 'could not update patient'})
+            return
+
+        self.set_status(200)
+        self.write({'message': 'patient updated: ' + patient.get('nhs_number')})
 
     def delete(self, nhs_number):
         self.db.delete({'nhs_number': nhs_number})

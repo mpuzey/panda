@@ -38,7 +38,22 @@ class AppointmentHandler(BaseHandler):
             return
 
         self.set_status(201)
-        self.write({'message': 'new appointment added:' + appointment.get('id')})
+        self.write({'message': 'new appointment added: ' + appointment.get('id')})
+
+    def put(self, id):
+        appointment = json.loads(self.request.body)
+        errors = validate(appointment)
+        if errors:
+            self.write_error(400, errors)
+            return
+
+        result =  self.db.update({'id': id}, appointment)
+        if not result.acknowledged:
+            self.write({'error': 'could not update appointment'})
+            return
+
+        self.set_status(200)
+        self.write({'message': 'appointment updated: ' + appointment.get('id')})
 
     def delete(self, id):
         self.db.update({'id': id}, {'status': 'cancelled'})

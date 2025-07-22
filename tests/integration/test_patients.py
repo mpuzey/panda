@@ -23,16 +23,16 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         }
         self.assertEqual(body, expected_patient)
 
-    def test_post_appointment_creates_appointment(self):
+    def test_post_patient_creates_patient(self):
         new_patient = {
-            'nhs_number': '1373645350',
+            'nhs_number': '1373645351',
             'name': 'Dr Glenn Clark',
             'date_of_birth': '1996-02-01',
             'postcode': 'N6 2FA'
         }
 
         response = self.fetch(
-            f'/api/patients/1373645350',
+            f'/api/patients/1373645351',
             method='POST',
             body=json.dumps(new_patient),
             headers={'Content-Type': 'application/json'}
@@ -41,10 +41,31 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         self.assertEqual(response.code, 201)
         body = json.loads(response.body)
 
-        expected_body = {'message': 'new patient added:1373645350'}
+        expected_body = {'message': 'new patient added: 1373645351'}
         self.assertEqual(body, expected_body)
 
-    # TODO: add integration tests around delete and update
+    def test_put_patient_updates_patient(self):
+        new_patient = {
+            'nhs_number': '1373645351',
+            'name': 'Dr Glenn Tipton',  # <-- update
+            'date_of_birth': '1996-02-01',
+            'postcode': 'N6 2FA'
+        }
+
+        response = self.fetch(
+            f'/api/patients/1373645351',
+            method='PUT',
+            body=json.dumps(new_patient),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        self.assertEqual(response.code, 200)
+        body = json.loads(response.body)
+
+        expected_body = {'message': 'patient updated: 1373645351'}
+        self.assertEqual(body, expected_body)
+
+    # TODO: add integration tests around delete
 
 
 if __name__ == '__main__':

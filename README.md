@@ -23,6 +23,7 @@ python3 main.py
 ```
 
 ### Fetching all patients
+(alternatively, you run the integration tests, see "Running the integration tests")
 ```
 curl http://localhost:8889/api/patients/
 ```
@@ -32,9 +33,14 @@ curl http://localhost:8889/api/patients/
 curl http://localhost:8889/api/patients/1373645350
 ```
 
-### Create a new patient
+### Creating a new patient
 ```
 curl -X POST http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+```
+
+### Updating patient details
+```
+curl -X PUT http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Close", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
 ### Deleting a patient
@@ -58,14 +64,19 @@ curl http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 curl -X POST http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
-### Deleting an appointment
+### Updating an appointment
+```
+curl -X PUT http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Close", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
+```
+
+### Cancelling an appointment
 ```
 curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
 
 ### Inspecting the db 
-Assumes the db is already running and seeded (see Setup instructions):
+Assumes the db is already running andsee ded (see "Setup instructions"):
 ```
 docker exec -it mongodb bash
 
@@ -83,7 +94,7 @@ python3 -m unittest discover tests/api
 ```
 
 ### Running the integration tests
-Note that mongodb must be running for these tests to pass (see Native Panda setup - Mac OS)
+Note that mongodb must be running for these tests to pass (see "Native Panda setup - Mac OS)
 ```
 python3 -m unittest discover tests/integration
 ```
@@ -130,4 +141,5 @@ but are not limited to, the following:
 * Further integration tests
 * Terraform code around an AWS deployment (or similar) of the PANDA system
 * Proper mod 10 checks around NHS number 
+* Uplift to the async Tornado handlers and MongoDB Driver for scalability
  

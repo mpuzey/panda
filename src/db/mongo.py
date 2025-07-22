@@ -32,14 +32,13 @@ class MongoDB:
         print('inserted id' + str(result.inserted_id))
         return result
 
-    def update(self, query, new_values):
+    def update(self, query, updated_values):
         # query = {"name": "John"}
-        # new_values = {"$set": {"age": 31}}
+        new_values = {"$set": updated_values}
 
         result = self.collection.update_one(query, new_values)
 
-        # Print the number of documents updated
-        print(result.modified_count)
+        print(result)
         return result
 
     def delete(self, query):
