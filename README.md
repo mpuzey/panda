@@ -8,12 +8,12 @@ Note that Docker is required to run a local instance of mongodb. The application
 Docker for ease of local development. 
 
 ### With Docker: 
-Built on docker Desktop 4.24.2 - requires 4.24.2 or later.
+Built on Docker Desktop 4.24.2 - requires 4.24.2 or later.
 ```
 docker-compose up
 ``` 
 
-### Native setup - Mac OS: 
+### Native Panda setup - Mac OS:
 ```
 brew install Python 3.9
 pip3 install -r requirements.txt
