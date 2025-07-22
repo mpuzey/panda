@@ -14,14 +14,12 @@ docker-compose up
 ``` 
 
 ### Native setup - Mac OS: 
-TODO: complete instructions for setup without dockerised app: 
 ```
 brew install Python 3.9
 pip3 install -r requirements.txt
-python3 main.py
 
-# In a new tab:
 ./run.sh db
+python3 main.py
 ```
 
 ### Fetching all patients

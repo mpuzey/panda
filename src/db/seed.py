@@ -33,3 +33,4 @@ def seed_patients():
 if __name__ == '__main__':
   seed_patients()
   seed_appointments()
+  client.close()
