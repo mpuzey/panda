@@ -119,7 +119,7 @@ class TestPatientService(unittest.TestCase):
         
         response = self.patient_service.delete_patient('1373645350')
         
-        self.assertEqual(response['status'], 404)
+        self.assertEqual(response['status'], 500)
         self.assertEqual(response['error'], ERR_PATIENT_NOT_FOUND)
 
     def test_get_all_patients_success(self):

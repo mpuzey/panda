@@ -14,7 +14,7 @@ from constants import (
     APPOINTMENT_SERVICE_FIELD_STATUS,
     APPOINTMENT_SERVICE_FIELD_MESSAGE,
     APPOINTMENT_SERVICE_FIELD_APPOINTMENT,
-    MONGODB_COLLECTION_APPOINTMENTS,
+    MONGODB_COLLECTION_APPOINTMENTS, APPOINTMENT_FIELD_ID, APPOINTMENT_SERVICE_FIELD_APPOINTMENTS,
 )
 from src.service.appointment_validation import validate
 
@@ -32,7 +32,7 @@ class AppointmentService:
 
         result = self.mongo_database.create(appointment)
         if not result.acknowledged:
-            return {'status': 500, 'error': ERR_COULD_NOT_CREATE_APPOINTMENT}
+            return {APPOINTMENT_SERVICE_FIELD_STATUS: 500, APPOINTMENT_SERVICE_FIELD_ERROR: ERR_COULD_NOT_CREATE_APPOINTMENT}
 
         return {
             APPOINTMENT_SERVICE_FIELD_STATUS: HTTP_201_CREATED,
@@ -45,7 +45,7 @@ class AppointmentService:
         if errors:
             return {APPOINTMENT_SERVICE_FIELD_STATUS: 400, APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS: errors}
 
-        result = self.mongo_database.update({'id': appointment_id}, appointment)
+        result = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, appointment)
         if not result.acknowledged:
             return {APPOINTMENT_SERVICE_FIELD_STATUS: 500, APPOINTMENT_SERVICE_FIELD_ERROR: ERR_COULD_NOT_UPDATE_APPOINTMENT}
 
@@ -56,7 +56,7 @@ class AppointmentService:
 
     def get_appointment(self, appointment_id):
         """Get an appointment by ID."""
-        result = self.mongo_database.get({'id': appointment_id})
+        result = self.mongo_database.get({APPOINTMENT_FIELD_ID: appointment_id})
         if not result:
             return {APPOINTMENT_SERVICE_FIELD_STATUS: 404, APPOINTMENT_SERVICE_FIELD_ERROR: ERR_APPOINTMENT_NOT_FOUND}
 
@@ -77,19 +77,19 @@ class AppointmentService:
 
     def delete_appointment(self, appointment_id):
         """Delete an appointment by ID."""
-        result = self.mongo_database.delete({'id': appointment_id})
+        result = self.mongo_database.delete({APPOINTMENT_FIELD_ID: appointment_id})
         if not result.deleted_count:
-            return {'status': 404, 'error': ERR_APPOINTMENT_NOT_FOUND}
+            return {APPOINTMENT_SERVICE_FIELD_STATUS: 404, APPOINTMENT_SERVICE_FIELD_ERROR: ERR_APPOINTMENT_NOT_FOUND}
 
         return {
-            'status': HTTP_200_OK,
-            'message': MSG_APPOINTMENT_CANCELLED.format(appointment_id)
+            APPOINTMENT_SERVICE_FIELD_STATUS: HTTP_200_OK,
+            APPOINTMENT_SERVICE_FIELD_MESSAGE: MSG_APPOINTMENT_CANCELLED.format(appointment_id)
         }
 
     def get_all_appointments(self):
         """Get all appointments."""
         appointments = self.mongo_database.getAll()
         return {
-            'status': HTTP_200_OK,
-            'appointments': appointments
-        } 
+            APPOINTMENT_SERVICE_FIELD_STATUS: HTTP_200_OK,
+            APPOINTMENT_SERVICE_FIELD_APPOINTMENTS: appointments
+        }

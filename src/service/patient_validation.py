@@ -1,7 +1,6 @@
 import re
-from datetime import datetime
 
-from constants import UK_POSTCODE_VALIDATION_REGEX, PATIENT_FIELD_NHS_NUMBER, PATIENT_FIELD_NAME, PATIENT_FIELD_DATE_OF_BIRTH, FIELD_POSTCODE, \
+from constants import UK_POSTCODE_VALIDATION_REGEX, PATIENT_FIELD_NHS_NUMBER, PATIENT_FIELD_NAME, PATIENT_FIELD_DATE_OF_BIRTH, PATIENT_FIELD_POSTCODE, \
     NHS_NUMBER_REGEX, DATE_FORMAT, INVALID_DATE_FORMAT_ERROR_TEXT, INVALID_DATE_OF_BIRTH_ERROR_TEXT, \
     INVALID_NHS_NUMBER_ERROR_TEXT, INVALID_NAME_ERROR_TEXT, INVALID_UK_POSTCODE_ERROR_TEXT
 from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
@@ -9,7 +8,7 @@ from src.service.validation_utils import check_required_fields, check_regex, che
 
 def validate(patient):
     errors = []
-    required_fields = [PATIENT_FIELD_NHS_NUMBER, PATIENT_FIELD_NAME, PATIENT_FIELD_DATE_OF_BIRTH, FIELD_POSTCODE]
+    required_fields = [PATIENT_FIELD_NHS_NUMBER, PATIENT_FIELD_NAME, PATIENT_FIELD_DATE_OF_BIRTH, PATIENT_FIELD_POSTCODE]
     errors += check_required_fields(patient, required_fields)
 
     if errors:
