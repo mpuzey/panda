@@ -1,9 +1,10 @@
 import re
 from datetime import datetime
+from constants import MISSING_REQUIRED_FIELD_ERROR_TEXT
 
 
 def check_required_fields(data, required_fields):
-    return [f"Missing required field: {field}" for field in required_fields if not data.get(field)]
+    return [MISSING_REQUIRED_FIELD_ERROR_TEXT.format(field) for field in required_fields if not data.get(field)]
 
 
 def check_regex(value, regex, error_msg):

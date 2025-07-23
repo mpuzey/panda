@@ -1,5 +1,20 @@
 import unittest
 from src.service.appointment_validation import validate
+from constants import (
+    MISSING_REQUIRED_FIELD_ERROR_TEXT,
+    INVALID_UUID_ERROR_TEXT,
+    INVALID_ISO8601_TIME_ERROR_TEXT,
+    INVALID_DURATION_FORMAT_ERROR_TEXT,
+    INVALID_STATUS_ERROR_TEXT,
+    INVALID_UK_POSTCODE_ERROR_TEXT,
+    INVALID_PATIENT_ID_ERROR_TEXT,
+    INVALID_CLINICIAN_ERROR_TEXT,
+    FIELD_STATUS,
+    FIELD_TIME,
+    FIELD_DURATION,
+    FIELD_PATIENT,
+    FIELD_CLINICIAN
+)
 
 
 class TestValidation(unittest.TestCase):
@@ -24,46 +39,46 @@ class TestValidation(unittest.TestCase):
         del appointment['status']
         del appointment['time']
         errors = validate(appointment)
-        assert 'Missing required field: status' in errors
-        assert 'Missing required field: time' in errors
+        assert MISSING_REQUIRED_FIELD_ERROR_TEXT.format('status') in errors
+        assert MISSING_REQUIRED_FIELD_ERROR_TEXT.format('time') in errors
 
     def test_none_fields(self):
         appointment = self.valid_appointment.copy()
         appointment['patient'] = None
         appointment['duration'] = None
         errors = validate(appointment)
-        assert 'Missing required field: patient' in errors
-        assert 'Missing required field: duration' in errors
+        assert MISSING_REQUIRED_FIELD_ERROR_TEXT.format('patient') in errors
+        assert MISSING_REQUIRED_FIELD_ERROR_TEXT.format('duration') in errors
 
     def test_invalid_uuid(self):
         appointment = self.valid_appointment.copy()
         appointment['id'] = 'invalid-uuid'
         errors = validate(appointment)
-        assert 'Invalid UUID format for \'id\'' in errors
+        assert INVALID_UUID_ERROR_TEXT.format('id') in errors
 
     def test_invalid_time_format(self):
         appointment = self.valid_appointment.copy()
         appointment['time'] = '06/04/2025 16:30'
         errors = validate(appointment)
-        assert 'Invalid ISO 8601 datetime format for \'time\'' in errors
+        assert INVALID_ISO8601_TIME_ERROR_TEXT.format('time') in errors
 
     def test_invalid_duration(self):
         appointment = self.valid_appointment.copy()
         appointment['duration'] = '60minutes'
         errors = validate(appointment)
-        assert 'Invalid format for \'duration\' (expected formats like \"1h\" or \"30m\")' in errors
+        assert INVALID_DURATION_FORMAT_ERROR_TEXT.format('duration') in errors
 
     def test_invalid_status(self):
         appointment = self.valid_appointment.copy()
         appointment['status'] = 'closed'
         errors = validate(appointment)
-        assert 'Invalid \'status\' value. Allowed: \'active\', \'attended\', \'cancelled\', \'missed\'' in errors
+        assert INVALID_STATUS_ERROR_TEXT in errors
 
     def test_invalid_postcode(self):
         appointment = self.valid_appointment.copy()
         appointment['postcode'] = '12345'
         errors = validate(appointment)
-        assert 'Invalid UK postcode format' in errors
+        assert INVALID_UK_POSTCODE_ERROR_TEXT in errors
 
     def test_valid_postcodes(self):
         valid_postcodes = [
@@ -98,19 +113,19 @@ class TestValidation(unittest.TestCase):
                 appointment = self.valid_appointment.copy()
                 appointment['postcode'] = pc
                 errors = validate(appointment)
-                assert 'Invalid UK postcode format' in errors
+                assert INVALID_UK_POSTCODE_ERROR_TEXT in errors
 
     def test_invalid_appointment_id(self):
         appointment = self.valid_appointment.copy()
         appointment['patient'] = 'ABC123'
         errors = validate(appointment)
-        assert 'Invalid \'patient\' ID. Expected 10-digit number' in errors
+        assert INVALID_PATIENT_ID_ERROR_TEXT in errors
 
     def test_short_clinician_name(self):
         appointment = self.valid_appointment.copy()
         appointment['clinician'] = 'Dr'
         errors = validate(appointment)
-        assert 'Invalid \'clinician\' value' in errors
+        assert INVALID_CLINICIAN_ERROR_TEXT in errors
 
 
 if __name__ == '__main__':
