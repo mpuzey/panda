@@ -15,4 +15,4 @@ class ServiceResult:
     result_type: ResultType
     data: Optional[Any] = None
     errors: Optional[List[str]] = None
-    message: Optional[str] = None 
+    message: Optional[str] = None

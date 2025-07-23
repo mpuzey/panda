@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 from src.service.patient_service import PatientService
-from src.service.result_types import ResultType
+from src.service.results import ResultType
 from constants import (
     ERR_COULD_NOT_CREATE_PATIENT,
     ERR_COULD_NOT_UPDATE_PATIENT,

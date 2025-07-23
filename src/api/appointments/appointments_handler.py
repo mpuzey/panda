@@ -1,7 +1,7 @@
 import json
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
-from src.service.result_types import ResultType
+from src.service.results import ResultType
 from bson.json_util import dumps as bson_dumps
 from constants import (
     PANDA_RESPONSE_FIELD_APPOINTMENTS,

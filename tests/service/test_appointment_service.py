@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 from src.service.appointment_service import AppointmentService
-from src.service.result_types import ResultType
+from src.service.results import ResultType
 from constants import (
     ERR_COULD_NOT_CREATE_APPOINTMENT,
     ERR_COULD_NOT_UPDATE_APPOINTMENT,

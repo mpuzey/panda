@@ -1,5 +1,5 @@
 from src.db.mongo import MongoDB
-from src.service.result_types import ServiceResult, ResultType
+from src.service.results import ServiceResult, ResultType
 
 from constants import (
     ERR_COULD_NOT_CREATE_PATIENT,

@@ -2,7 +2,7 @@ import json
 
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
-from src.service.result_types import ResultType
+from src.service.results import ResultType
 from constants import (
     PANDA_RESPONSE_FIELD_ERROR,
     PANDA_RESPONSE_FIELD_MESSAGE,
