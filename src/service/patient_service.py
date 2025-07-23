@@ -1,3 +1,5 @@
+from src.db.mongo import MongoDB
+
 from constants import (
     ERR_COULD_NOT_CREATE_PATIENT,
     ERR_COULD_NOT_UPDATE_PATIENT,
@@ -14,14 +16,15 @@ from constants import (
     PATIENT_SERVICE_FIELD_PATIENT,
     PATIENT_SERVICE_FIELD_PATIENTS,
     PATIENT_FIELD_NHS_NUMBER,
+    MONGODB_COLLECTION_PATIENTS
 )
 from src.service.patient_validation import validate
 
 
 class PatientService:
 
-    def __init__(self, mongo_database):
-        self.mongo_database = mongo_database    
+    def __init__(self, mongo_database_client):
+        self.mongo_database = MongoDB(mongo_database_client, MONGODB_COLLECTION_PATIENTS)
 
     def create_patient(self, patient, nhs_number):
         """Create a new patient with validation."""
@@ -72,7 +75,7 @@ class PatientService:
 
     def delete_patient(self, nhs_number):
         """Delete a patient by NHS number."""
-        result = self.mongo_database.delete({'nhs_number': nhs_number})
+        result = self.mongo_database.delete({PATIENT_FIELD_NHS_NUMBER: nhs_number})
         # TODO: should this be a 200 aka an idempotent delete response?
         if not result.deleted_count:
             return {PATIENT_SERVICE_FIELD_STATUS: 500, PATIENT_SERVICE_FIELD_ERROR: ERR_PATIENT_NOT_FOUND}

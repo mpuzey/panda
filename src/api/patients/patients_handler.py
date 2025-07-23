@@ -1,7 +1,6 @@
 import json
 from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
-from src.db.mongo import MongoDB
 from bson.json_util import dumps as bson_dumps
 from constants import (
     MONGODB_COLLECTION_PATIENTS,
@@ -13,8 +12,7 @@ from constants import (
 
 class PatientsHandler(BaseHandler):
     def initialize(self, database_client):
-        self.mongo_database = MongoDB(database_client, MONGODB_COLLECTION_PATIENTS)
-        self.patient_service = PatientService(self.mongo_database)
+        self.patient_service = PatientService(database_client)
 
     def get(self):
         response = self.patient_service.get_all_patients()
