@@ -25,7 +25,7 @@ class PatientHandler(BaseHandler):
             'postcode': result.get('postcode')
         })
 
-    def post(self, _):
+    def post(self, nhs_number):
         patient = json.loads(self.request.body)
         errors = validate(patient)
         if errors:
@@ -38,7 +38,7 @@ class PatientHandler(BaseHandler):
             return
 
         self.set_status(HTTP_201_CREATED)
-        self.write({'message': MSG_NEW_PATIENT_ADDED + patient.get('nhs_number')})
+        self.write({'message': MSG_NEW_PATIENT_ADDED.format(nhs_number)})
 
     def put(self, nhs_number):
         patient = json.loads(self.request.body)
@@ -53,7 +53,7 @@ class PatientHandler(BaseHandler):
             return
 
         self.set_status(HTTP_200_OK)
-        self.write({'message': MSG_PATIENT_UPDATED + patient.get('nhs_number')})
+        self.write({'message': MSG_PATIENT_UPDATED.format(nhs_number)})
 
     def delete(self, nhs_number):
         self.mongo_database.delete({'nhs_number': nhs_number})

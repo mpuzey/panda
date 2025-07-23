@@ -29,7 +29,7 @@ class AppointmentHandler(BaseHandler):
             'id': result.get('id')
         })
 
-    def post(self, _):
+    def post(self, appointment_id):
         appointment = json.loads(self.request.body)
         errors = validate(appointment)
         if errors:
@@ -42,7 +42,7 @@ class AppointmentHandler(BaseHandler):
             return
 
         self.set_status(HTTP_201_CREATED)
-        self.write({'message': MSG_NEW_APPOINTMENT_ADDED + appointment.get('id')})
+        self.write({'message': MSG_NEW_APPOINTMENT_ADDED.format(appointment_id)})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
@@ -57,7 +57,7 @@ class AppointmentHandler(BaseHandler):
             return
 
         self.set_status(HTTP_200_OK)
-        self.write({'message': MSG_APPOINTMENT_UPDATED + appointment.get('id')})
+        self.write({'message': MSG_APPOINTMENT_UPDATED.format(appointment_id)})
 
     def delete(self, id):
         self.mongo_database.update({'id': id}, {'status': 'cancelled'})
