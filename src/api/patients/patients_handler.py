@@ -7,10 +7,10 @@ from constants import MONGODB_COLLECTION_PATIENTS
 
 class PatientsHandler(BaseHandler):
     def initialize(self, database_client):
-        self.database = MongoDB(database_client, MONGODB_COLLECTION_PATIENTS)
+        self.mongo_database = MongoDB(database_client, MONGODB_COLLECTION_PATIENTS)
 
     def get(self):
-        patients = self.database.getAll()
+        patients = self.mongo_database.getAll()
         patients_bson_string = bson_dumps(patients)
         # TODO: clean up by stripping bson fields
         patients_json = json.loads(patients_bson_string)
