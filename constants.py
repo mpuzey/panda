@@ -76,8 +76,10 @@ MSG_APPOINTMENT_UPDATED = 'appointment updated: {}'
 MSG_PATIENT_DELETED = 'patient deleted: {}'
 MSG_APPOINTMENT_CANCELLED = 'appointment cancelled: {}'
 
-# Error strings for readable dates
+# Readable formatting
 READABLE_DATE_FORMAT = 'YYYY-MM-DD'
+
+# Error strings
 INVALID_DATE_FORMAT_ERROR_TEXT = f'Invalid date format for {FIELD_DATE_OF_BIRTH}. Expected "{READABLE_DATE_FORMAT}"'
 INVALID_DATE_OF_BIRTH_ERROR_TEXT = f'Invalid date of birth. Cannot be in the future'
 INVALID_UK_POSTCODE_ERROR_TEXT = 'Invalid UK postcode format'

@@ -1,5 +1,4 @@
 import json
-
 import pymongo
 from constants import MONGODB_DATABASE_NAME
 
