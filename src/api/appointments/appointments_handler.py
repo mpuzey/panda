@@ -11,7 +11,7 @@ class AppointmentsHandler(BaseHandler):
     def get(self):
         appointments = self.db.getAll()
         appointments_bson_string = bson_dumps(appointments)
-        # TODO: clean up by stripping bson fields
+        # TODO: clean up by stripping BSON fields
         appointments_json = json.loads(appointments_bson_string)
         self.write({'appointments': appointments_json})
 

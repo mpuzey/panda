@@ -3,7 +3,9 @@ import json
 from src.api.base_handler import BaseHandler
 from src.api.appointments.validation import validate
 from src.db.mongo import MongoDB
-from constants import COLLECTION_APPOINTMENTS, ERR_APPOINTMENT_NOT_FOUND, ERR_COULD_NOT_CREATE_APPOINTMENT, ERR_COULD_NOT_UPDATE_APPOINTMENT, MSG_NEW_APPOINTMENT_ADDED, MSG_APPOINTMENT_UPDATED, MSG_APPOINTMENT_CANCELLED, HTTP_201_CREATED, HTTP_200_OK
+from constants import COLLECTION_APPOINTMENTS, ERR_APPOINTMENT_NOT_FOUND, ERR_COULD_NOT_CREATE_APPOINTMENT, \
+    ERR_COULD_NOT_UPDATE_APPOINTMENT, MSG_NEW_APPOINTMENT_ADDED, MSG_APPOINTMENT_UPDATED, MSG_APPOINTMENT_CANCELLED, \
+    HTTP_201_CREATED, HTTP_200_OK
 
 
 class AppointmentHandler(BaseHandler):
@@ -16,15 +18,16 @@ class AppointmentHandler(BaseHandler):
             self.write({'error': ERR_APPOINTMENT_NOT_FOUND})
             return
 
-        self.write({'patient': result.get('patient'),
-                    'status': result.get('status'),
-                    'time': result.get('time'),
-                    'duration': result.get('duration'),
-                    'clinician': result.get('clinician'),
-                    'department': result.get('department'),
-                    'postcode': result.get('postcode'),
-                    'id': result.get('id')
-                    })
+        self.write({
+            'patient': result.get('patient'),
+            'status': result.get('status'),
+            'time': result.get('time'),
+            'duration': result.get('duration'),
+            'clinician': result.get('clinician'),
+            'department': result.get('department'),
+            'postcode': result.get('postcode'),
+            'id': result.get('id')
+        })
 
     def post(self, _):
         appointment = json.loads(self.request.body)

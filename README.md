@@ -1,6 +1,6 @@
 # PANDA - Patient Appointment Network Data Application
 
-The Patient Appointment Network Data Application, or simply, - PANDA is a POC for a appointment booking services for NHS and private patients.  
+The Patient Appointment Network Data Application, or simply, - PANDA is a POC for an appointment booking services for NHS and private patients.  
 
 ## Setup instructions
 
@@ -35,7 +35,7 @@ pip3 install -r requirements.txt
 python3 main.py
 ```
 If you are on another OS, ignore the brew command and install python3, if not already, using your favourite package manager.
-The run.sh is bash only so will not be runnable on Windows without Cygwin. For simplicity, if you are on windows use the
+run.sh is bash-only, so it will not run on Windows without Cygwin. For simplicity, if you are on windows, use the
  docker-compose setup only.
 
 ## Using the API
@@ -93,13 +93,13 @@ curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-63
 ```
 
 ## Inspecting the db 
-Assumes the db is already running andsee ded (see "Setup instructions"):
+Assumes the db is already running and seeded (see "Setup instructions"):
 ```
 docker exec -it mongodb bash
 
 mongosh
 use panda
-show colletions
+show collections
 db.patients.find()
 db.appointments.find()
 ```
@@ -113,7 +113,7 @@ python3 -m unittest discover tests/api
 ```
 
 ### Running the integration tests
-Note that mongodb must be running for these tests to pass (see "Native Panda setup - Mac OS)
+Note that mongodb must be running for these tests to pass (see "Native Panda setup - Mac OS")
 ```
 python3 -m unittest discover tests/integration
 ```
@@ -147,15 +147,15 @@ A separate team has been tasked with building the frontend for the application. 
 Additional Considerations
 As you've worked with the client for a while, you have an awareness of some past issues and upcoming work that it might be worth taking into consideration:
 * The client has been burned by vendor lock-in in the past, and prefers working with smaller frameworks. ✅ 
-* The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅ ❌ - unit tests around validation but much many more are needed around business logic 
-* The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ❌ - mongo used for persistence for now, can be swapped out easily
+* The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅ ❌ - unit tests around validation but many more are needed around business logic 
+* The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ❌ - MongoDB used for persistence for now, can be swapped out easily
 * The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌
 * The PANDA currently doesn't contain much data about clinicians, but will eventually track data about the specific organisations they currently work for and where they work from. ❌
 * The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌
 * The client would like to ensure that patient names can be represented correctly, in line with GDPR. ❌
 
 ## TODOs
-There are a number of TODOs scattered throughout this project around further iterations of this implementation. These include,
+There are a number of TODOs scattered throughout this project regarding further iterations of this implementation. These include,
 but are not limited to, the following:  
 * Further integration tests
 * Terraform code around an AWS deployment (or similar) of the PANDA system
