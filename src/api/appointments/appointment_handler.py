@@ -2,65 +2,65 @@ import json
 
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
-from src.db.mongo import MongoDB
-from constants import MONGODB_COLLECTION_APPOINTMENTS
+from constants import APPOINTMENT_FIELD_STATUS, MONGODB_COLLECTION_APPOINTMENTS, PANDA_RESPONSE_FIELD_ERROR, PANDA_RESPONSE_FIELD_ERROR, PANDA_RESPONSE_FIELD_MESSAGE, PANDA_RESPONSE_FIELD_STATUS, APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS, APPOINTMENT_SERVICE_FIELD_ERROR, APPOINTMENT_SERVICE_FIELD_STATUS, APPOINTMENT_SERVICE_FIELD_MESSAGE
 
 
 class AppointmentHandler(BaseHandler):
     def initialize(self, database_client):
-        self.mongo_database = MongoDB(database_client, MONGODB_COLLECTION_APPOINTMENTS)
-        self.appointment_service = AppointmentService(self.mongo_database)
+        self.appointment_service = AppointmentService(database_client)
 
     def get(self, appointment_id):
         response = self.appointment_service.get_appointment(appointment_id)
 
-        if 'error' in response:
-            self.set_status(response['status'])
-            self.write({'error': response['error']})
+        error = response.get(APPOINTMENT_SERVICE_FIELD_ERROR)
+
+        if error:
+            self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
+            self.write({PANDA_RESPONSE_FIELD_ERROR: error})
             return
 
-        self.set_status(response['status'])
+        self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
         self.write(response['appointment'])
 
     def post(self, appointment_id):
         appointment = json.loads(self.request.body)
         response = self.appointment_service.create_appointment(appointment, appointment_id)
 
-        if 'errors' in response:
-            self.write_error(response['status'], response['errors'])
+        if APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS in response:
+            self.write_error(response[APPOINTMENT_SERVICE_FIELD_STATUS], response[APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS])
             return
 
-        if 'error' in response:
-            self.set_status(response['status'])
-            self.write({'error': response['error']})
+        if APPOINTMENT_SERVICE_FIELD_ERROR in response:
+            self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
+            self.write({PANDA_RESPONSE_FIELD_ERROR: response[APPOINTMENT_SERVICE_FIELD_ERROR]})
             return
 
-        self.set_status(response['status'])
-        self.write({'message': response['message']})
+        self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response[APPOINTMENT_SERVICE_FIELD_MESSAGE]})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
         response = self.appointment_service.update_appointment(appointment, appointment_id)
 
         if 'errors' in response:
-            self.write_error(response['status'], response['errors'])
+            self.write_error(response[APPOINTMENT_SERVICE_FIELD_STATUS], response[APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS])
             return
 
         if 'error' in response:
-            self.set_status(response['status'])
-            self.write({'error': response['error']})
+            self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
+            self.write({PANDA_RESPONSE_FIELD_ERROR: response[APPOINTMENT_SERVICE_FIELD_ERROR]})
             return
 
         self.set_status(response['status'])
-        self.write({'message': response['message']})
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response[APPOINTMENT_SERVICE_FIELD_MESSAGE]})
 
     def delete(self, appointment_id):
         response = self.appointment_service.delete_appointment(appointment_id)
 
         if 'error' in response:
-            self.set_status(response['status'])
-            self.write({'error': response['error']})
+            self.set_status(response[APPOINTMENT_SERVICE_FIELD_STATUS])
+            self.write({PANDA_RESPONSE_FIELD_ERROR: response[APPOINTMENT_SERVICE_FIELD_MESSAGE]})
             return
 
-        self.set_status(response['status'])
-        self.write({'message': response['message']})
+        self.set_status(response[APPOINTMENT_FIELD_STATUS])
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response[APPOINTMENT_SERVICE_FIELD_MESSAGE]})

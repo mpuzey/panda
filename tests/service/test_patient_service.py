@@ -42,8 +42,8 @@ class TestPatientService(unittest.TestCase):
         response = self.patient_service.create_patient(invalid_patient, '1373645350')
         
         self.assertEqual(response['status'], 400)
-        self.assertIn('errors', response)
-        self.assertIn('Invalid NHS number', response['errors'][0])
+        assert 'errors' in response
+        assert 'Invalid NHS number' in response['errors'][0]
 
     def test_create_patient_database_error(self):
         """Test patient creation when database operation fails."""
@@ -72,8 +72,8 @@ class TestPatientService(unittest.TestCase):
         response = self.patient_service.update_patient(invalid_patient, '1373645350')
         
         self.assertEqual(response['status'], 400)
-        self.assertIn('errors', response)
-        self.assertIn('Invalid name', response['errors'][0])
+        assert 'errors' in response
+        assert 'Invalid name' in response['errors'][0]
 
     def test_update_patient_database_error(self):
         """Test patient update when database operation fails."""

@@ -3,7 +3,7 @@ import json
 from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
 from src.db.mongo import MongoDB
-from constants import MONGODB_COLLECTION_PATIENTS
+from constants import MONGODB_COLLECTION_PATIENTS, APPOINTMENT_FIELD_STATUS, PANDA_RESPONSE_FIELD_ERROR
 
 
 class PatientHandler(BaseHandler):
@@ -15,8 +15,8 @@ class PatientHandler(BaseHandler):
         response = self.patient_service.get_patient(nhs_number)
         
         if 'error' in response:
-            self.set_status(response['status'])
-            self.write({'error': response['error']})
+            self.set_status(response[APPOINTMENT_FIELD_STATUS])
+            self.write({PANDA_RESPONSE_FIELD_ERROR: response[PANDA_RESPONSE_FIELD_ERROR]})
             return
 
         self.set_status(response['status'])
