@@ -61,6 +61,7 @@ NHS_NUMBER_REGEX = r'^\d{10}$'
 DURATION_REGEX = r'^\d+[hm]$'
 DATE_FORMAT = '%Y-%m-%d'
 
+
 # Error/Message Templates
 ERR_PATIENT_NOT_FOUND = 'patient not found'
 ERR_APPOINTMENT_NOT_FOUND = 'appointment not found'
@@ -74,3 +75,8 @@ MSG_PATIENT_UPDATED = 'patient updated: {}'
 MSG_APPOINTMENT_UPDATED = 'appointment updated: {}'
 MSG_PATIENT_DELETED = 'patient deleted: {}'
 MSG_APPOINTMENT_CANCELLED = 'appointment cancelled: {}'
+
+# Error strings for readable dates
+READABLE_DATE_FORMAT = 'YYYY-MM-DD'
+INVALID_DATE_FORMAT_ERROR_TEXT = f'Invalid date format for {FIELD_DATE_OF_BIRTH}. Expected "{READABLE_DATE_FORMAT}"'
+INVALID_DATE_OF_BIRTH_ERROR_TEXT = f'Invalid date of birth. Cannot be in the future'

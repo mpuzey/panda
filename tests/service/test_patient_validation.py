@@ -1,5 +1,6 @@
 import unittest
 from src.service.patient_validation import validate
+from constants import READABLE_DATE_FORMAT
 
 
 class TestValidatePatientData(unittest.TestCase):
@@ -41,24 +42,34 @@ class TestValidatePatientData(unittest.TestCase):
                 errors = validate(data)
                 assert 'Invalid NHS number. Must be a 10-digit number' in errors
 
-    # TODO: Why isn't this test assertion working?
-    # def test_invalid_name(self):
-    #     for name in ['', 'Ze', None]:
-    #         with self.subTest(name=name):
-    #             data = self.valid_patient.copy()
-    #             data['name'] = name
-    #             errors = validate(data)
-    #             assert 'Invalid name. Must be a non-empty string of at least 3 characters' in errors
+def test_invalid_name(self):
+    invalid_names = [
+        ('', 'Missing required field: name'),
+        ('Ze', 'Invalid name. Must be a non-empty string of at least 3 characters'),
+        (None, 'Missing required field: name'),
+    ]
+    for name, expected_error in invalid_names:
+        with self.subTest(name=name):
+            data = self.valid_patient.copy()
+            data['name'] = name
+            errors = validate(data)
+            assert expected_error in errors
 
-    # TODO: Why isn't this assertion working?
-    # def test_invalid_date_of_birth(self):
-    #     invalid_dobs = ['01/02/1996', '1996-13-01', 'future-date', '3000-01-01', '', None]
-    #     for dob in invalid_dobs:
-    #         with self.subTest(date_of_birth=dob):
-    #             data = self.valid_patient.copy()
-    #             data['date_of_birth'] = dob
-    #             errors = validate(data)
-    #             assert 'Invalid date format for date_of_birth. Expected \'YYYY-MM-DD\'' in errors
+    def test_invalid_date_of_birth(self):
+        invalid_dobs = [
+            ('01/02/1996', f'Invalid date format for date_of_birth. Expected "{READABLE_DATE_FORMAT}"'),
+            ('1996-13-01', f'Invalid date format for date_of_birth. Expected "{READABLE_DATE_FORMAT}"'),
+            ('future-date', f'Invalid date format for date_of_birth. Expected "{READABLE_DATE_FORMAT}"'),
+            ('3000-01-01', 'Invalid date of birth. Cannot be in the future'),
+            ('', 'Missing required field: date_of_birth'),
+            (None, 'Missing required field: date_of_birth'),
+        ]
+        for date_of_birth, expected_error in invalid_dobs:
+            with self.subTest(date_of_birth=date_of_birth):
+                data = self.valid_patient.copy()
+                data['date_of_birth'] = date_of_birth
+                errors = validate(data)
+                assert expected_error in errors
 
     def test_invalid_postcode(self):
         invalid_postcodes = ['12345', 'ABC123', 'N6-2FA', 'N62FAAA']
