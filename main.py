@@ -21,6 +21,7 @@ def start_app():
     db_client = pymongo.MongoClient(MONGODB_URI)
 
     return tornado.web.Application([
+        # TODO: Move regex to constants.py
         (r'/api/patients/([0-9]+)', PatientHandler, {'db_client': db_client}),
         (r'/api/patients/', PatientsHandler,  {'db_client': db_client}),
         (r'/api/appointments/([a-f0-9\-]{36})', AppointmentHandler,  {'db_client': db_client}),

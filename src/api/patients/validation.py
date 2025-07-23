@@ -1,13 +1,13 @@
 import re
 from datetime import datetime
 
-from constants import UK_POSTCODE_VALIDATION_REGEX
+from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_NHS_NUMBER, FIELD_NAME, FIELD_DATE_OF_BIRTH, FIELD_POSTCODE, NHS_NUMBER_REGEX, DATE_FORMAT
 
 
 def validate(patient):
     errors = []
 
-    required_fields = ['nhs_number', 'name', 'date_of_birth', 'postcode']
+    required_fields = [FIELD_NHS_NUMBER, FIELD_NAME, FIELD_DATE_OF_BIRTH, FIELD_POSTCODE]
 
     errors.extend([f'Missing required field: {field}' for field in required_fields if not patient.get(field)])
     if errors:
@@ -28,7 +28,7 @@ def validate(patient):
 # TODO: Ensure that all NHS numbers are checksum validated.
 # https://www.datadictionary.nhs.uk/attributes/nhs_number.html
 def validate_nhs_number(value):
-    if not re.fullmatch(r'\d{10}', str(value)):
+    if not re.fullmatch(NHS_NUMBER_REGEX, str(value)):
         return ["Invalid NHS number. Must be a 10-digit number"]
     return []
 
@@ -41,12 +41,12 @@ def validate_name(value):
 
 def validate_date_of_birth(value):
     try:
-        dob = datetime.strptime(value, '%Y-%m-%d').date()
+        dob = datetime.strptime(value, DATE_FORMAT).date()
         if dob > datetime.today().date():
             return ['Invalid date of birth. Cannot be in the future']
         return []
     except (ValueError, TypeError):
-        return ['Invalid date format for date_of_birth. Expected \'YYYY-MM-DD\'']
+        return [f'Invalid date format for {FIELD_DATE_OF_BIRTH}. Expected \'{DATE_FORMAT}\'']
 
 # https://ideal-postcodes.co.uk/guides/uk-postcode-format
 def validate_postcode(value):

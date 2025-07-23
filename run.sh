@@ -4,7 +4,7 @@
 function db() {
     docker pull mongodb/mongodb-community-server:latest
     docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest
-    python3 src/db/seed.py
+    python3 -m  src.db.seed
 }
 
 function app() {

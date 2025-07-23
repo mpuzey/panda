@@ -1,19 +1,17 @@
 import pymongo
 import json
 import os
-
+import constants
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/"
-EXAMPLE_PATIENTS_FILENAME = "example_patients.json"
-EXAMPLE_APPOINTMENTS_FILENAME = 'example_appointments.json'
-MONGODB_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
+MONGODB_URI = os.environ.get('MONGO_URI', constants.DEFAULT_MONGODB_URI)
 
 client = pymongo.MongoClient(MONGODB_URI)
-db = client["panda"]
+db = client[constants.DB_NAME]
 
 
 def seed_appointments():
-  collection = db["appointments"]
-  with open(ROOT_PATH + EXAMPLE_APPOINTMENTS_FILENAME, 'r') as outfile:
+  collection = db[constants.COLLECTION_APPOINTMENTS]
+  with open(ROOT_PATH + constants.APPOINTMENTS_FILENAME, 'r') as outfile:
     appointments = json.load(outfile)
 
   result = collection.insert_many(appointments)
@@ -21,9 +19,9 @@ def seed_appointments():
 
 
 def seed_patients():
-  collection = db["patients"]
+  collection = db[constants.COLLECTION_PATIENTS]
 
-  with open(ROOT_PATH + EXAMPLE_PATIENTS_FILENAME, 'r') as outfile:
+  with open(ROOT_PATH + constants.PATIENTS_FILENAME, 'r') as outfile:
     patients = json.load(outfile)
 
   result = collection.insert_many(patients)

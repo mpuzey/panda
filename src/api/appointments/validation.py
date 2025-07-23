@@ -2,15 +2,15 @@ import re
 from datetime import datetime
 from uuid import UUID
 
-from constants import UK_POSTCODE_VALIDATION_REGEX
+from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_PATIENT, FIELD_STATUS, FIELD_TIME, FIELD_DURATION, FIELD_CLINICIAN, FIELD_DEPARTMENT, FIELD_POSTCODE, FIELD_ID, STATUS_ACTIVE, STATUS_ATTENDED, STATUS_CANCELLED, STATUS_MISSED, DURATION_REGEX, NHS_NUMBER_REGEX
 
 
 def validate(appointment):
     errors = []
 
     required_fields = [
-        'patient', 'status', 'time', 'duration',
-        'clinician', 'department', 'postcode', 'id'
+        FIELD_PATIENT, FIELD_STATUS, FIELD_TIME, FIELD_DURATION,
+        FIELD_CLINICIAN, FIELD_DEPARTMENT, FIELD_POSTCODE, FIELD_ID
     ]
     for field in required_fields:
         if field not in appointment or not appointment[field]:
@@ -32,53 +32,53 @@ def validate(appointment):
 
 def validate_details(appointment, errors):
 
-    if 'id' in appointment:
+    if FIELD_ID in appointment:
         try:
-            UUID(appointment['id'])
+            UUID(appointment[FIELD_ID])
         except ValueError:
-            errors.append('Invalid UUID format for \'id\'')
+            errors.append(f'Invalid UUID format for {FIELD_ID!r}')
 
-    if 'time' in appointment:
+    if FIELD_TIME in appointment:
         try:
-            datetime.fromisoformat(appointment['time'])
+            datetime.fromisoformat(appointment[FIELD_TIME])
         except ValueError:
-            errors.append('Invalid ISO 8601 datetime format for \'time\'')
+            errors.append(f'Invalid ISO 8601 datetime format for {FIELD_TIME!r}')
 
-    if 'duration' in appointment:
-        if not re.match(r'^\d+[hm]$', appointment['duration']):  # e.g., '1h' or '30m'
-            errors.append('Invalid format for \'duration\' (expected formats like \'1h\' or \'30m\')')
+    if FIELD_DURATION in appointment:
+        if not re.match(DURATION_REGEX, appointment[FIELD_DURATION]):
+            errors.append(f'Invalid format for {FIELD_DURATION!r} (expected formats like "1h" or "30m")')
 
-    if 'status' in appointment:
-        if appointment['status'] not in ['active', 'attended', 'cancelled', 'missed']:
-            errors.append('Invalid \'status\' value. Allowed: \'active\', \'attended\', \'cancelled\', \'missed\'')
+    if FIELD_STATUS in appointment:
+        if appointment[FIELD_STATUS] not in [STATUS_ACTIVE, STATUS_ATTENDED, STATUS_CANCELLED, STATUS_MISSED]:
+            errors.append(f'Invalid {FIELD_STATUS!r} value. Allowed: {STATUS_ACTIVE!r}, {STATUS_ATTENDED!r}, {STATUS_CANCELLED!r}, {STATUS_MISSED!r}')
 
     return errors
 
 
 def validate_personnel(appointment, errors):
-    if 'patient' in appointment:
-        if not re.match(r'^\d{10}$', appointment['patient']):
-            errors.append('Invalid \'patient\' ID. Expected 10-digit number')
+    if FIELD_PATIENT in appointment:
+        if not re.match(NHS_NUMBER_REGEX, appointment[FIELD_PATIENT]):
+            errors.append(f'Invalid {FIELD_PATIENT!r} ID. Expected 10-digit number')
 
-    if 'clinician' in appointment:
-        if not isinstance(appointment['clinician'], str) or len(appointment['clinician']) < 3:
-            errors.append('Invalid \'clinician\' value')
+    if FIELD_CLINICIAN in appointment:
+        if not isinstance(appointment[FIELD_CLINICIAN], str) or len(appointment[FIELD_CLINICIAN]) < 3:
+            errors.append(f'Invalid {FIELD_CLINICIAN!r} value')
 
     return errors
 
 
 def validate_location(appointment, errors):
-    postcode = appointment.get('postcode')
+    postcode = appointment.get(FIELD_POSTCODE)
     if not postcode:
-        errors.append('Missing postcode')
+        errors.append(f'Missing {FIELD_POSTCODE}')
         return errors
 
     # https://ideal-postcodes.co.uk/guides/uk-postcode-format
     if not re.match(UK_POSTCODE_VALIDATION_REGEX, postcode, re.IGNORECASE):
         errors.append('Invalid UK postcode format')
 
-    if 'department' in appointment:
-        if not isinstance(appointment['department'], str) or not appointment['department']:
-            errors.append('Invalid \'department\' value')
+    if FIELD_DEPARTMENT in appointment:
+        if not isinstance(appointment[FIELD_DEPARTMENT], str) or not appointment[FIELD_DEPARTMENT]:
+            errors.append(f'Invalid {FIELD_DEPARTMENT!r} value')
 
     return errors

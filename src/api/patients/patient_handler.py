@@ -3,16 +3,17 @@ import json
 from src.api.base_handler import BaseHandler
 from src.api.patients.validation import validate
 from src.db.mongo import MongoDB
+from constants import COLLECTION_PATIENTS, ERR_PATIENT_NOT_FOUND, ERR_COULD_NOT_CREATE_PATIENT, ERR_COULD_NOT_UPDATE_PATIENT, MSG_NEW_PATIENT_ADDED, MSG_PATIENT_UPDATED, MSG_PATIENT_DELETED, HTTP_201_CREATED, HTTP_200_OK
 
 
 class PatientHandler(BaseHandler):
     def initialize(self, db_client):
-        self.db = MongoDB(db_client, 'patients')
+        self.db = MongoDB(db_client, COLLECTION_PATIENTS)
 
     def get(self, nhs_number):
         result = self.db.get({'nhs_number': nhs_number})
         if not result:
-            self.write({'error': 'patient not found'})
+            self.write({'error': ERR_PATIENT_NOT_FOUND})
             return
 
         self.write({
@@ -31,11 +32,11 @@ class PatientHandler(BaseHandler):
 
         result = self.db.create(patient)
         if not result.acknowledged:
-            self.write({'error': 'could not create patient'})
+            self.write({'error': ERR_COULD_NOT_CREATE_PATIENT})
             return
 
-        self.set_status(201)
-        self.write({'message': 'new patient added: ' + patient.get('nhs_number')})
+        self.set_status(HTTP_201_CREATED)
+        self.write({'message': MSG_NEW_PATIENT_ADDED + patient.get('nhs_number')})
 
     def put(self, nhs_number):
         patient = json.loads(self.request.body)
@@ -46,12 +47,12 @@ class PatientHandler(BaseHandler):
 
         result = self.db.update({'nhs_number': nhs_number}, patient)
         if not result.acknowledged:
-            self.write({'error': 'could not update patient'})
+            self.write({'error': ERR_COULD_NOT_UPDATE_PATIENT})
             return
 
-        self.set_status(200)
-        self.write({'message': 'patient updated: ' + patient.get('nhs_number')})
+        self.set_status(HTTP_200_OK)
+        self.write({'message': MSG_PATIENT_UPDATED + patient.get('nhs_number')})
 
     def delete(self, nhs_number):
         self.db.delete({'nhs_number': nhs_number})
-        self.write({'message': 'patient' + nhs_number + 'deleted'})
+        self.write({'message': MSG_PATIENT_DELETED.format(nhs_number)})
