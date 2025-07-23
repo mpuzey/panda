@@ -1,64 +1,66 @@
 import json
 
 from src.api.base_handler import BaseHandler
-from src.service.appointment_validation import validate
+from src.service.appointment_service import AppointmentService
 from src.db.mongo import MongoDB
-from constants import MONGODB_COLLECTION_APPOINTMENTS, ERR_APPOINTMENT_NOT_FOUND, ERR_COULD_NOT_CREATE_APPOINTMENT, \
-    ERR_COULD_NOT_UPDATE_APPOINTMENT, MSG_NEW_APPOINTMENT_ADDED, MSG_APPOINTMENT_UPDATED, MSG_APPOINTMENT_CANCELLED, \
-    HTTP_201_CREATED, HTTP_200_OK
+from constants import MONGODB_COLLECTION_APPOINTMENTS
 
 
 class AppointmentHandler(BaseHandler):
     def initialize(self, database_client):
         self.mongo_database = MongoDB(database_client, MONGODB_COLLECTION_APPOINTMENTS)
+        self.appointment_service = AppointmentService(self.mongo_database)
 
     def get(self, appointment_id):
-        result = self.mongo_database.get({'id': appointment_id})
-        if not result:
-            self.write({'error': ERR_APPOINTMENT_NOT_FOUND})
+        response = self.appointment_service.get_appointment(appointment_id)
+
+        if 'error' in response:
+            self.set_status(response['status'])
+            self.write({'error': response['error']})
             return
 
-        self.write({
-            'patient': result.get('patient'),
-            'status': result.get('status'),
-            'time': result.get('time'),
-            'duration': result.get('duration'),
-            'clinician': result.get('clinician'),
-            'department': result.get('department'),
-            'postcode': result.get('postcode'),
-            'id': result.get('id')
-        })
+        self.set_status(response['status'])
+        self.write(response['appointment'])
 
     def post(self, appointment_id):
         appointment = json.loads(self.request.body)
-        errors = validate(appointment)
-        if errors:
-            self.write_error(400, errors)
+        response = self.appointment_service.create_appointment(appointment, appointment_id)
+
+        if 'errors' in response:
+            self.write_error(response['status'], response['errors'])
             return
 
-        result = self.mongo_database.create(appointment)
-        if not result.acknowledged:
-            self.write({'error': ERR_COULD_NOT_CREATE_APPOINTMENT})
+        if 'error' in response:
+            self.set_status(response['status'])
+            self.write({'error': response['error']})
             return
 
-        self.set_status(HTTP_201_CREATED)
-        self.write({'message': MSG_NEW_APPOINTMENT_ADDED.format(appointment_id)})
+        self.set_status(response['status'])
+        self.write({'message': response['message']})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
-        errors = validate(appointment)
-        if errors:
-            self.write_error(400, errors)
+        response = self.appointment_service.update_appointment(appointment, appointment_id)
+
+        if 'errors' in response:
+            self.write_error(response['status'], response['errors'])
             return
 
-        result =  self.mongo_database.update({'id': appointment_id}, appointment)
-        if not result.acknowledged:
-            self.write({'error': ERR_COULD_NOT_UPDATE_APPOINTMENT})
+        if 'error' in response:
+            self.set_status(response['status'])
+            self.write({'error': response['error']})
             return
 
-        self.set_status(HTTP_200_OK)
-        self.write({'message': MSG_APPOINTMENT_UPDATED.format(appointment_id)})
+        self.set_status(response['status'])
+        self.write({'message': response['message']})
 
-    def delete(self, id):
-        self.mongo_database.update({'id': id}, {'status': 'cancelled'})
-        self.write({'message': MSG_APPOINTMENT_CANCELLED.format(id)})
+    def delete(self, appointment_id):
+        response = self.appointment_service.delete_appointment(appointment_id)
+
+        if 'error' in response:
+            self.set_status(response['status'])
+            self.write({'error': response['error']})
+            return
+
+        self.set_status(response['status'])
+        self.write({'message': response['message']})

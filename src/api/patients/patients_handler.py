@@ -13,10 +13,10 @@ class PatientsHandler(BaseHandler):
 
     def get(self):
         response = self.patient_service.get_all_patients()
-        
+
         # TODO: Convert BSON objects to JSON for response and move this cleanup to service
         patients_bson_string = bson_dumps(response['patients'])
         patients_json = json.loads(patients_bson_string)
-        
+
         self.set_status(response['status'])
         self.write({'patients': patients_json})

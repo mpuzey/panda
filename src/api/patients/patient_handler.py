@@ -17,9 +17,10 @@ class PatientHandler(BaseHandler):
         if 'error' in response:
             self.set_status(response['status'])
             self.write({'error': response['error']})
-        else:
-            self.set_status(response['status'])
-            self.write(response['patient'])
+            return
+
+        self.set_status(response['status'])
+        self.write(response['patient'])
 
     def post(self, nhs_number):
         patient = json.loads(self.request.body)
@@ -27,12 +28,15 @@ class PatientHandler(BaseHandler):
         
         if 'errors' in response:
             self.write_error(response['status'], response['errors'])
-        elif 'error' in response:
+            return
+
+        if 'error' in response:
             self.set_status(response['status'])
             self.write({'error': response['error']})
-        else:
-            self.set_status(response['status'])
-            self.write({'message': response['message']})
+            return
+
+        self.set_status(response['status'])
+        self.write({'message': response['message']})
 
     def put(self, nhs_number):
         patient = json.loads(self.request.body)
