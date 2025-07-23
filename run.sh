@@ -10,7 +10,7 @@ function db() {
 function app() {
     docker build . -t panda
     docker rm -f panda
-    docker run -it -p 8889:8889 --name panda panda
+    docker run -it -p 8888:8888 --name panda panda
 }
 
 function clearAllContainers() {

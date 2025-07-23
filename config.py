@@ -2,5 +2,5 @@
 # the necessary environment variables required to run the application. Such as secrets. """
 import os
 
-PORT = int(os.environ.get('PORT', '8889'))
+PORT = int(os.environ.get('PORT', '8888'))
 MONGODB_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')

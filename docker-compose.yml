@@ -10,9 +10,9 @@ services:
     restart: always
     environment:
       MONGO_URI: "mongodb://mongo:27017/"
-      PORT: "8889"
+      PORT: "8888"
     ports:
-      - "8889:8889"
+      - "8888:8888"
     depends_on:
       - mongo
       - seed

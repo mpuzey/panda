@@ -43,53 +43,53 @@ run.sh is bash-only, so it will not run on Windows without Cygwin. For simplicit
 ### Fetching all patients
 (alternatively, you run the integration tests, see "Running the integration tests")
 ```
-curl http://localhost:8889/api/patients/
+curl http://localhost:8888/api/patients/
 ```
 
 ### Fetching a single patient
 ```
-curl http://localhost:8889/api/patients/1373645350
+curl http://localhost:8888/api/patients/1373645350
 ```
 
 ### Creating a new patient
 ```
-curl -X POST http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+curl -X POST http://localhost:8888/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
 ### Updating patient details
 ```
-curl -X PUT http://localhost:8889/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Close", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+curl -X PUT http://localhost:8888/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Close", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
 ### Deleting a patient
 ```
-curl -X DELETE http://localhost:8889/api/patients/1373645350
+curl -X DELETE http://localhost:8888/api/patients/1373645350
 ```
 
 
 ### Fetching all appointments 
 ```
-curl http://localhost:8889/api/appointments/
+curl http://localhost:8888/api/appointments/
 ```
 
 ### Fetching a single appointment
 ```
-curl http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
+curl http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
 ### Creating an appointment 
 ```
-curl -X POST http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
+curl -X POST http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
 ### Updating an appointment
 ```
-curl -X PUT http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Close", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
+curl -X PUT http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Close", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
 ### Cancelling an appointment
 ```
-curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
+curl -X DELETE http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
 ## Inspecting the database 
