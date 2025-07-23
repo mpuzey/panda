@@ -1,8 +1,9 @@
 import re
 from datetime import datetime
 
-from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_NHS_NUMBER, FIELD_NAME, FIELD_DATE_OF_BIRTH, FIELD_POSTCODE, NHS_NUMBER_REGEX, DATE_FORMAT
-from src.api.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
+from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_NHS_NUMBER, FIELD_NAME, FIELD_DATE_OF_BIRTH, FIELD_POSTCODE, \
+    NHS_NUMBER_REGEX, DATE_FORMAT
+from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
 
 
 def validate(patient):
@@ -23,23 +24,6 @@ def validate(patient):
     if errors:
         print('Invalid appointment:', errors)
     return errors
-
-
-# TODO: Ensure that all NHS numbers are checksum validated.
-# https://www.datadictionary.nhs.uk/attributes/nhs_number.html
-def validate_nhs_number(value):
-    # Deprecated: now handled by check_regex in validate()
-    return []
-
-
-def validate_name(value):
-    # Deprecated: now handled by check_min_length in validate()
-    return []
-
-
-def validate_date_of_birth(value):
-    # Deprecated: now handled by check_date_format in validate()
-    return []
 
 # https://ideal-postcodes.co.uk/guides/uk-postcode-format
 def validate_postcode(value):

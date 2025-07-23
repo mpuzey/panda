@@ -2,8 +2,10 @@ import re
 from datetime import datetime
 from uuid import UUID
 
-from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_PATIENT, FIELD_STATUS, FIELD_TIME, FIELD_DURATION, FIELD_CLINICIAN, FIELD_DEPARTMENT, FIELD_POSTCODE, FIELD_ID, STATUS_ACTIVE, STATUS_ATTENDED, STATUS_CANCELLED, STATUS_MISSED, DURATION_REGEX, NHS_NUMBER_REGEX, DATE_FORMAT
-from src.api.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
+from constants import UK_POSTCODE_VALIDATION_REGEX, FIELD_PATIENT, FIELD_STATUS, FIELD_TIME, FIELD_DURATION, \
+    FIELD_CLINICIAN, FIELD_DEPARTMENT, FIELD_POSTCODE, FIELD_ID, STATUS_ACTIVE, STATUS_ATTENDED, STATUS_CANCELLED, \
+    STATUS_MISSED, DURATION_REGEX, NHS_NUMBER_REGEX, DATE_FORMAT
+from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
 
 
 def validate(appointment):

@@ -1,5 +1,5 @@
 import unittest
-from src.api.appointments.validation import validate
+from src.service.appointment_validation import validate
 
 
 class TestValidation(unittest.TestCase):

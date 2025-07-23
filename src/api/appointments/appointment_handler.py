@@ -1,7 +1,7 @@
 import json
 
 from src.api.base_handler import BaseHandler
-from src.api.appointments.validation import validate
+from src.service.appointment_validation import validate
 from src.db.mongo import MongoDB
 from constants import MONGODB_COLLECTION_APPOINTMENTS, ERR_APPOINTMENT_NOT_FOUND, ERR_COULD_NOT_CREATE_APPOINTMENT, \
     ERR_COULD_NOT_UPDATE_APPOINTMENT, MSG_NEW_APPOINTMENT_ADDED, MSG_APPOINTMENT_UPDATED, MSG_APPOINTMENT_CANCELLED, \

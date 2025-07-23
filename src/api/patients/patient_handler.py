@@ -1,7 +1,7 @@
 import json
 
 from src.api.base_handler import BaseHandler
-from src.api.patients.validation import validate
+from src.service.patient_validation import validate
 from src.db.mongo import MongoDB
 from constants import MONGODB_COLLECTION_PATIENTS, ERR_PATIENT_NOT_FOUND, ERR_COULD_NOT_CREATE_PATIENT,  \
     ERR_COULD_NOT_UPDATE_PATIENT, MSG_NEW_PATIENT_ADDED, MSG_PATIENT_UPDATED, MSG_PATIENT_DELETED, HTTP_201_CREATED,  \

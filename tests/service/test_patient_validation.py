@@ -1,5 +1,5 @@
 import unittest
-from src.api.patients.validation import validate
+from src.service.patient_validation import validate
 
 
 class TestValidatePatientData(unittest.TestCase):
