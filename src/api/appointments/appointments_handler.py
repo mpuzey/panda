@@ -2,8 +2,11 @@ import json
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
 from bson.json_util import dumps as bson_dumps
-from constants import APPOINTMENT_SERVICE_FIELD_APPOINTMENTS, APPOINTMENT_SERVICE_FIELD_STATUS, \
-    PANDA_RESPONSE_FIELD_APPOINTMENTS
+from constants import (
+    APPOINTMENT_SERVICE_FIELD_APPOINTMENTS,
+    APPOINTMENT_SERVICE_FIELD_STATUS,
+    PANDA_RESPONSE_FIELD_APPOINTMENTS,
+)
 
 
 class AppointmentsHandler(BaseHandler):

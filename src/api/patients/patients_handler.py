@@ -3,8 +3,12 @@ from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
 from src.db.mongo import MongoDB
 from bson.json_util import dumps as bson_dumps
-from constants import MONGODB_COLLECTION_PATIENTS, PATIENT_SERVICE_FIELD_PATIENTS, PATIENT_SERVICE_FIELD_STATUS, \
+from constants import (
+    MONGODB_COLLECTION_PATIENTS,
+    PATIENT_SERVICE_FIELD_PATIENTS,
+    PATIENT_SERVICE_FIELD_STATUS,
     PANDA_RESPONSE_FIELD_PATIENTS
+)
 
 
 class PatientsHandler(BaseHandler):
