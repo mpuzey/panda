@@ -92,8 +92,8 @@ curl -X PUT http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b
 curl -X DELETE http://localhost:8889/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 ```
 
-## Inspecting the db 
-Assumes the db is already running and seeded (see "Setup instructions"):
+## Inspecting the database 
+Assumes the database is already running and seeded (see "Setup instructions"):
 ```
 docker exec -it mongodb bash
 

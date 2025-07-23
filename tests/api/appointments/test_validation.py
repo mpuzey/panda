@@ -51,7 +51,7 @@ class TestValidation(unittest.TestCase):
         appointment = self.valid_appointment.copy()
         appointment['duration'] = '60minutes'
         errors = validate(appointment)
-        assert 'Invalid format for \'duration\' (expected formats like \'1h\' or \'30m\')' in errors
+        assert 'Invalid format for \'duration\' (expected formats like \"1h\" or \"30m\")' in errors
 
     def test_invalid_status(self):
         appointment = self.valid_appointment.copy()

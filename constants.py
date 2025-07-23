@@ -6,9 +6,9 @@ PUBLIC_ROOT = os.path.join(ROOT_PATH, 'static')
 UK_POSTCODE_VALIDATION_REGEX = r'^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$'
 
 # Database and Collection Names
-DB_NAME = 'panda'
-COLLECTION_APPOINTMENTS = 'appointments'
-COLLECTION_PATIENTS = 'patients'
+MONGODB_DATABASE_NAME = 'panda'
+MONGODB_COLLECTION_APPOINTMENTS = 'appointments'
+MONGODB_COLLECTION_PATIENTS = 'patients'
 
 # Files
 PATIENTS_FILENAME = 'example_patients.json'

@@ -34,10 +34,10 @@ class TestValidatePatientData(unittest.TestCase):
 
     def test_invalid_nhs_number(self):
         invalid_numbers = ['abc123', '123', '12345678901', '000000000']
-        for nhs in invalid_numbers:
-            with self.subTest(nhs_number=nhs):
+        for nhs_number in invalid_numbers:
+            with self.subTest(nhs_number=nhs_number):
                 data = self.valid_patient.copy()
-                data['nhs_number'] = nhs
+                data['nhs_number'] = nhs_number
                 errors = validate(data)
                 assert 'Invalid NHS number. Must be a 10-digit number' in errors
 
@@ -62,19 +62,19 @@ class TestValidatePatientData(unittest.TestCase):
 
     def test_invalid_postcode(self):
         invalid_postcodes = ['12345', 'ABC123', 'N6-2FA', 'N62FAAA']
-        for pc in invalid_postcodes:
-            with self.subTest(postcode=pc):
+        for postcode in invalid_postcodes:
+            with self.subTest(postcode=postcode):
                 data = self.valid_patient.copy()
-                data['postcode'] = pc
+                data['postcode'] = postcode
                 errors = validate(data)
                 assert 'Invalid UK postcode format' in errors
 
     def test_valid_postcode_formats(self):
         valid_postcodes = ['EC1A 1BB', 'W1A 0AX', 'M1 1AE', 'B33 8TH', 'CR2 6XH', 'DN55 1PT', 'n6 2fa', 'N62FA']
-        for pc in valid_postcodes:
-            with self.subTest(postcode=pc):
+        for postcode in valid_postcodes:
+            with self.subTest(postcode=postcode):
                 data = self.valid_patient.copy()
-                data['postcode'] = pc
+                data['postcode'] = postcode
                 errors = validate(data)
                 self.assertEqual(errors, [])
 

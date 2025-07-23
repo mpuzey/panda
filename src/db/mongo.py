@@ -1,7 +1,7 @@
 import json
 
 import pymongo
-from constants import DB_NAME
+from constants import MONGODB_DATABASE_NAME
 
 
 class MongoDB:
@@ -9,7 +9,7 @@ class MongoDB:
     def __init__(self, client, collection_name):
         # Connect to the MongoDB instance
         self.client = client
-        self.db = self.client[DB_NAME]
+        self.db = self.client[MONGODB_DATABASE_NAME]
         self.collection = self.db[collection_name]
 
     def get(self, query):
