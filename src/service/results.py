@@ -2,8 +2,7 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import Optional, List, Any
 
-
-class ResultType(Enum):
+class ResponseType(Enum):
     SUCCESS = 'success'
     NOT_FOUND = 'not_found'
     VALIDATION_ERROR = 'validation_error'
@@ -12,8 +11,8 @@ class ResultType(Enum):
 
 
 @dataclass
-class ServiceResult:
-    result_type: ResultType
+class ServiceResponse:
+    response_type: ResponseType
     data: Optional[Any] = None
     errors: Optional[List[str]] = None
     message: Optional[str] = None

@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock
 from src.service.appointment_service import AppointmentService
-from src.service.results import ResultType
+from src.service.results import ResponseType
 from constants import (
     ERR_COULD_NOT_CREATE_APPOINTMENT,
     ERR_COULD_NOT_UPDATE_APPOINTMENT,
@@ -37,7 +37,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.SUCCESS)
+        self.assertEqual(response.response_type, ResponseType.SUCCESS)
         self.assertEqual(response.message, MSG_NEW_APPOINTMENT_ADDED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
         self.mock_appointment_repository.create.assert_called_once_with(self.valid_appointment)
 
@@ -48,7 +48,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.create_appointment(invalid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.VALIDATION_ERROR)
+        self.assertEqual(response.response_type, ResponseType.VALIDATION_ERROR)
         assert 'Invalid' in response.errors[0]
 
     def test_create_appointment_database_error(self):
@@ -59,7 +59,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.DATABASE_ERROR)
+        self.assertEqual(response.response_type, ResponseType.DATABASE_ERROR)
         self.assertIn(ERR_COULD_NOT_CREATE_APPOINTMENT, response.errors)
 
     def test_create_appointment_already_exists_active(self):
@@ -70,7 +70,7 @@ class TestAppointmentService(unittest.TestCase):
 
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
-        self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
+        self.assertEqual(response.response_type, ResponseType.BUSINESS_ERROR)
         self.assertIn(ERR_COULD_NOT_CREATE_APPOINTMENT, response.errors)
 
     def test_create_appointment_cancelled_appointment_cannot_be_reinstated(self):
@@ -81,7 +81,7 @@ class TestAppointmentService(unittest.TestCase):
 
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
-        self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
+        self.assertEqual(response.response_type, ResponseType.BUSINESS_ERROR)
         self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
         self.mock_appointment_repository.create.assert_not_called()
 
@@ -93,7 +93,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.update_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.SUCCESS)
+        self.assertEqual(response.response_type, ResponseType.SUCCESS)
         self.assertEqual(response.message, MSG_APPOINTMENT_UPDATED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
 
     def test_update_appointment_validation_error(self):
@@ -103,7 +103,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.update_appointment(invalid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.VALIDATION_ERROR)
+        self.assertEqual(response.response_type, ResponseType.VALIDATION_ERROR)
 
     def test_update_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test that a cancelled appointment cannot be reinstated with an update."""
@@ -113,7 +113,7 @@ class TestAppointmentService(unittest.TestCase):
 
         response = self.appointment_service.update_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
-        self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
+        self.assertEqual(response.response_type, ResponseType.BUSINESS_ERROR)
         self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
         self.mock_appointment_repository.update_by_id.assert_not_called()
 
@@ -123,7 +123,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.get_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.SUCCESS)
+        self.assertEqual(response.response_type, ResponseType.SUCCESS)
         self.assertEqual(response.data['id'], '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
     def test_get_appointment_not_found(self):
@@ -132,7 +132,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.get_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.NOT_FOUND)
+        self.assertEqual(response.response_type, ResponseType.NOT_FOUND)
         self.assertIn(ERR_APPOINTMENT_NOT_FOUND, response.errors)
 
     def test_delete_appointment_success(self):
@@ -141,7 +141,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.delete_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.SUCCESS)
+        self.assertEqual(response.response_type, ResponseType.SUCCESS)
         self.assertEqual(response.message, MSG_APPOINTMENT_CANCELLED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
 
     def test_delete_appointment_not_found(self):
@@ -150,7 +150,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.delete_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
-        self.assertEqual(response.result_type, ResultType.NOT_FOUND)
+        self.assertEqual(response.response_type, ResponseType.NOT_FOUND)
         self.assertIn(ERR_APPOINTMENT_NOT_FOUND, response.errors)
 
     def test_get_all_appointments_success(self):
@@ -160,7 +160,7 @@ class TestAppointmentService(unittest.TestCase):
         
         response = self.appointment_service.get_all_appointments()
         
-        self.assertEqual(response.result_type, ResultType.SUCCESS)
+        self.assertEqual(response.response_type, ResponseType.SUCCESS)
         self.assertEqual(len(response.data), 2)
         self.mock_appointment_repository.get_all.assert_called_once()
 

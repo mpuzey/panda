@@ -1,5 +1,5 @@
 from src.repository.appointment import AppointmentRepository
-from src.service.results import ServiceResult, ResultType
+from src.service.results import ServiceResponse, ResponseType
 
 from constants import (
     APPOINTMENT_FIELD_CLINICIAN,
@@ -35,24 +35,24 @@ class AppointmentService:
         """Create a new appointment with validation."""
         errors = validate(appointment)
         if errors:
-            return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
+            return ServiceResponse(ResponseType.VALIDATION_ERROR, errors=errors)
 
         # Check if appointment already exists
         existing_appointment = self.get_appointment(appointment_id)
-        if existing_appointment.result_type == ResultType.SUCCESS:
+        if existing_appointment.response_type == ResponseType.SUCCESS:
             # Appointment exists, check if it's cancelled
             status = existing_appointment.data.get(APPOINTMENT_FIELD_STATUS)
             if status == STATUS_CANCELLED:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+                return ServiceResponse(ResponseType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
             else:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
+                return ServiceResponse(ResponseType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
 
         success = self.appointment_repository.create(appointment)
         if not success:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
+            return ServiceResponse(ResponseType.DATABASE_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
 
-        return ServiceResult(
-            ResultType.SUCCESS,
+        return ServiceResponse(
+            ResponseType.SUCCESS,
             message=MSG_NEW_APPOINTMENT_ADDED.format(appointment_id)
         )
 
@@ -60,18 +60,18 @@ class AppointmentService:
         """Update an existing appointment with validation."""
         errors = validate(appointment)
         if errors:
-            return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
+            return ServiceResponse(ResponseType.VALIDATION_ERROR, errors=errors)
 
-        get_service_result = self.prevent_cancelled_appointment_from_being_updated(appointment_id)
-        if get_service_result.result_type == ResultType.BUSINESS_ERROR:
-            return get_service_result
+        get_service_response = self.prevent_cancelled_appointment_from_being_updated(appointment_id)
+        if get_service_response.response_type == ResponseType.BUSINESS_ERROR:
+            return get_service_response
 
         success = self.appointment_repository.update_by_id(appointment_id, appointment)
         if not success:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+            return ServiceResponse(ResponseType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
 
-        return ServiceResult(
-            ResultType.SUCCESS,
+        return ServiceResponse(
+            ResponseType.SUCCESS,
             message=MSG_APPOINTMENT_UPDATED.format(appointment_id)
         )
 
@@ -79,10 +79,10 @@ class AppointmentService:
         """Get an appointment by ID."""
         appointment_data = self.appointment_repository.get_by_id(appointment_id)
         if not appointment_data:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
+            return ServiceResponse(ResponseType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
 
-        return ServiceResult(
-            ResultType.SUCCESS,
+        return ServiceResponse(
+            ResponseType.SUCCESS,
             # TODO: Convert BSON to JSON (move to mongo layer)
             data={
                 APPOINTMENT_FIELD_PATIENT: appointment_data.get(APPOINTMENT_FIELD_PATIENT),
@@ -101,23 +101,23 @@ class AppointmentService:
         cancelled_appointment = {APPOINTMENT_FIELD_STATUS: STATUS_CANCELLED}
         success = self.appointment_repository.update_by_id(appointment_id, cancelled_appointment)
         if not success:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
+            return ServiceResponse(ResponseType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
 
-        return ServiceResult(
-            ResultType.SUCCESS,
+        return ServiceResponse(
+            ResponseType.SUCCESS,
             message=MSG_APPOINTMENT_CANCELLED.format(appointment_id)
         )
 
     def get_all_appointments(self):
         """Get all appointments."""
         appointments = self.appointment_repository.get_all()
-        return ServiceResult(ResultType.SUCCESS, data=appointments)
+        return ServiceResponse(ResponseType.SUCCESS, data=appointments)
 
     def prevent_cancelled_appointment_from_being_updated(self, appointment_id):
         """Prevent a cancelled appointment from being updated."""
-        get_result = self.get_appointment(appointment_id)
-        if get_result.result_type == ResultType.SUCCESS:
-            status = get_result.data.get(APPOINTMENT_FIELD_STATUS)
+        get_response = self.get_appointment(appointment_id)
+        if get_response.response_type == ResponseType.SUCCESS:
+            status = get_response.data.get(APPOINTMENT_FIELD_STATUS)
             if status == STATUS_CANCELLED:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
-        return ServiceResult(ResultType.SUCCESS)
+                return ServiceResponse(ResponseType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+        return ServiceResponse(ResponseType.SUCCESS)
