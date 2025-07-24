@@ -71,6 +71,20 @@ class TestAppointmentService(unittest.TestCase):
         self.assertEqual(response.message, MSG_APPOINTMENT_UPDATED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
         self.mock_mongo_database.update.assert_called_once_with({'id': '01542f70-929f-4c9a-b4fa-e672310d7e78'}, self.valid_appointment)
 
+    def test_update_appointment_cancelled_appointment_cannot_be_reinstated(self):
+        """Test that a cancelled appointment cannot be reinstated with an update."""
+
+        cancelled_appointment = self.valid_appointment
+        cancelled_appointment['status'] = 'cancelled'
+        self.mock_mongo_database.get.return_value = cancelled_appointment
+        self.mock_mongo_database.update.return_value.acknowledged = True
+
+        response = self.appointment_service.update_appointment(self.valid_appointment,
+                                                               '01542f70-929f-4c9a-b4fa-e672310d7e78')
+
+        self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
+        self.mock_mongo_database.update.assert_not_called()
+
     def test_update_appointment_validation_error(self):
         """Test appointment update with validation errors."""
         invalid_appointment = self.valid_appointment.copy()

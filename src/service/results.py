@@ -4,10 +4,11 @@ from typing import Optional, List, Any
 
 
 class ResultType(Enum):
-    SUCCESS = "success"
-    NOT_FOUND = "not_found"
-    VALIDATION_ERROR = "validation_error"
-    DATABASE_ERROR = "database_error"
+    SUCCESS = 'success'
+    NOT_FOUND = 'not_found'
+    VALIDATION_ERROR = 'validation_error'
+    DATABASE_ERROR = 'database_error'
+    BUSINESS_ERROR = 'business_error'
 
 
 @dataclass

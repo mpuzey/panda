@@ -19,11 +19,16 @@ If you run into issues here is the exact version of Docker panda was built on:
 * Docker Desktop 4.24.2 - Apple Silicon (ARM64):
   https://desktop.docker.com/mac/main/arm64/124339/Docker.dmg
 
-
+Standing the services up:
 ```
 # docker-compose is included in Docker Desktop
 docker-compose up
 ``` 
+
+Teardown:
+```
+docker-compose down
+```
 
 ### Native Panda setup - Mac OS:
 Note that Docker is still required to run a local instance of mongodb (see above).
@@ -123,9 +128,9 @@ Here is the list of requirements for this POC:
 https://github.com/airelogic/tech-test-portal/tree/main/Patient-Appointment-Backend#application-requirements
 
 The client has elucidated the following hard requirements for the MVP:
-* It should be possible to add patients to and remove them from the PANDA. ✅ 
-* It should be possible to check and update patient details in the PANDA. ❌
-* It should be possible to add new appointments to the PANDA, and check and update appointment details. ❌ (update still missing?)
+* It should be possible to add patients to and remove them from the PANDA. ✅
+* It should be possible to check and update patient details in the PANDA. ✅
+* It should be possible to add new appointments to the PANDA, and check and update appointment details. ✅
 * The PANDA may need to be restarted for maintenance, and the data should be persisted. ✅ 
 * The PANDA backend should communicate with the frontend via some sort of HTTP API. ✅ 
 * The PANDA API does not need to handle authentication because it is used within a trusted environment. ✅ 
@@ -147,7 +152,7 @@ A separate team has been tasked with building the frontend for the application. 
 Additional Considerations
 As you've worked with the client for a while, you have an awareness of some past issues and upcoming work that it might be worth taking into consideration:
 * The client has been burned by vendor lock-in in the past, and prefers working with smaller frameworks. ✅ 
-* The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅ ❌ - unit tests around validation but many more are needed around business logic 
+* The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅  
 * The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ❌ - MongoDB used for persistence for now, can be swapped out easily
 * The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌
 * The PANDA currently doesn't contain much data about clinicians, but will eventually track data about the specific organisations they currently work for and where they work from. ❌
