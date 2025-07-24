@@ -208,7 +208,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
         self.assertEqual(recreate_response.code, 400)
         body = json.loads(recreate_response.body)
-        self.assertEqual(body['error'], 'could not update appointment')
+        assert 'could not update appointment' in body['errors']
 
     def test_update_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test that a cancelled appointment cannot be reinstated via PUT."""
@@ -263,7 +263,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
         self.assertEqual(update_response.code, 400)
         body = json.loads(update_response.body)
-        self.assertEqual(body['error'], 'could not update appointment')
+        assert 'could not update appointment' in body['errors']
 
 
 if __name__ == '__main__':

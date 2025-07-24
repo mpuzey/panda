@@ -110,7 +110,6 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         expected_body = {'message': f'patient updated: {nhs_number}'}
         self.assertEqual(body, expected_body)
 
-    # TODO: add integration tests around delete
 
 
 if __name__ == '__main__':

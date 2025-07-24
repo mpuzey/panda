@@ -4,7 +4,6 @@ from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
 from src.service.results import ResponseType
 from constants import (
-    PANDA_RESPONSE_FIELD_ERROR,
     PANDA_RESPONSE_FIELD_ERRORS,
     PANDA_RESPONSE_FIELD_MESSAGE
 )
@@ -23,7 +22,7 @@ class PatientHandler(BaseHandler):
         
         if service_response.response_type == ResponseType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)
@@ -40,7 +39,7 @@ class PatientHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(201)
@@ -57,7 +56,7 @@ class PatientHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)
@@ -68,7 +67,7 @@ class PatientHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)

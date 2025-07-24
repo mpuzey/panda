@@ -4,7 +4,6 @@ from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
 from src.service.results import ResponseType
 from constants import (
-    PANDA_RESPONSE_FIELD_ERROR,
     PANDA_RESPONSE_FIELD_ERRORS,
     PANDA_RESPONSE_FIELD_MESSAGE,
 )
@@ -24,7 +23,7 @@ class AppointmentHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)
@@ -34,7 +33,6 @@ class AppointmentHandler(BaseHandler):
         appointment = json.loads(self.request.body)
         service_response = self.appointment_service.create_appointment(appointment, appointment_id)
 
-        # TODO: Consolidate "error" and "errors" response fields into just "errors"
         if service_response.response_type == ResponseType.VALIDATION_ERROR:
             self.set_status(400)
             self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
@@ -42,12 +40,12 @@ class AppointmentHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.BUSINESS_ERROR:
             self.set_status(400)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         if service_response.response_type == ResponseType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(201)
@@ -64,12 +62,12 @@ class AppointmentHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.BUSINESS_ERROR:
             self.set_status(400)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         if service_response.response_type == ResponseType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)
@@ -80,7 +78,7 @@ class AppointmentHandler(BaseHandler):
 
         if service_response.response_type == ResponseType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_response.errors})
             return
 
         self.set_status(200)
