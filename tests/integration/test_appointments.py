@@ -27,7 +27,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         super().tearDown()
 
     def test_get_appointment_valid_appointment_id(self):
-        valid_uuid = "ac9729b5-5e11-42b4-87e2-6396b4faf1b9"
+        valid_uuid = "ac9729b5-5e11-42b4-87e2-6396b4faf1c9"  # Changed to avoid conflict with seed data
         self.test_appointment_ids.append(valid_uuid)
         # Create the appointment first
         new_appointment = {
@@ -69,7 +69,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
     def test_post_appointment_creates_appointment(self):
         new_appointment = {
-            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1d1',  # Changed to avoid conflict with seed data
             'patient': '9876543210',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
@@ -81,7 +81,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         self.test_appointment_ids.append(new_appointment['id'])
 
         response = self.fetch(
-            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1d1',
             method='POST',
             body=json.dumps(new_appointment),
             headers={'Content-Type': 'application/json'}
@@ -90,12 +90,12 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         self.assertEqual(response.code, 201)
         body = json.loads(response.body)
 
-        expected_body = {'message': 'new appointment added: ac9729b5-5e11-42b4-87e2-6396b4faf1b1'}
+        expected_body = {'message': 'new appointment added: ac9729b5-5e11-42b4-87e2-6396b4faf1d1'}
         self.assertEqual(body, expected_body)
 
     def test_put_appointment_updates_appointment(self):
         new_appointment = {
-            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1e1',  # Changed to avoid conflict with seed data
             'patient': '9876543210',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
@@ -107,7 +107,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         self.test_appointment_ids.append(new_appointment['id'])
 
         response = self.fetch(
-            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
+            f'/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1e1',
             method='PUT',
             body=json.dumps(new_appointment),
             headers={'Content-Type': 'application/json'}
@@ -116,12 +116,12 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         self.assertEqual(response.code, 200)
         body = json.loads(response.body)
 
-        expected_body = {'message': 'appointment updated: ac9729b5-5e11-42b4-87e2-6396b4faf1b1'}
+        expected_body = {'message': 'appointment updated: ac9729b5-5e11-42b4-87e2-6396b4faf1e1'}
         self.assertEqual(body, expected_body)
 
     def test_delete_appointment_cancels_appointment(self):
         """Test that DELETE request cancels an appointment."""
-        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1b2'
+        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1f2'  # Changed to avoid conflict with seed data
         self.test_appointment_ids.append(appointment_id)
 
         # First create an appointment
@@ -157,7 +157,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
     def test_create_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test that a cancelled appointment cannot be recreated via POST."""
-        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1b3'
+        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1f3'  # Changed to avoid conflict with seed data
         self.test_appointment_ids.append(appointment_id)
 
         # First create an appointment
@@ -212,7 +212,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
 
     def test_update_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test that a cancelled appointment cannot be reinstated via PUT."""
-        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1b4'
+        appointment_id = 'ac9729b5-5e11-42b4-87e2-6396b4faf1f4'  # Changed to avoid conflict with seed data
         self.test_appointment_ids.append(appointment_id)
 
         # First create an appointment

@@ -3,19 +3,19 @@ import json
 from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
 from src.service.results import ResultType
-from src.repository.repository_factory import RepositoryFactory, DatabaseType
 from constants import (
     PANDA_RESPONSE_FIELD_ERROR,
+    PANDA_RESPONSE_FIELD_ERRORS,
     PANDA_RESPONSE_FIELD_MESSAGE
 )
 
 
 class PatientHandler(BaseHandler):
-    def initialize(self, database_client):
-        patient_repository = RepositoryFactory.create_patient_repository(
-            DatabaseType.MONGODB,
-            database_client
-        )
+    def initialize(self, patient_repository):
+        """Initialize handler with injected patient repository.
+        Args:
+            patient_repository: Repository instance for patient data access
+        """
         self.patient_service = PatientService(patient_repository)
 
     def get(self, nhs_number):
@@ -35,7 +35,7 @@ class PatientHandler(BaseHandler):
         
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_result.errors})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:
@@ -52,7 +52,7 @@ class PatientHandler(BaseHandler):
 
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_result.errors})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:

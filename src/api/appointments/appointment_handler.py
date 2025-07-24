@@ -3,19 +3,20 @@ import json
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
 from src.service.results import ResultType
-from src.repository.repository_factory import RepositoryFactory, DatabaseType
 from constants import (
     PANDA_RESPONSE_FIELD_ERROR,
+    PANDA_RESPONSE_FIELD_ERRORS,
     PANDA_RESPONSE_FIELD_MESSAGE,
 )
 
 
 class AppointmentHandler(BaseHandler):
-    def initialize(self, database_client):
-        appointment_repository = RepositoryFactory.create_appointment_repository(
-            DatabaseType.MONGODB,
-            database_client
-        )
+    def initialize(self, appointment_repository):
+        """Initialize handler with injected appointment repository.
+
+        Args:
+            appointment_repository: Repository instance for appointment data access
+        """
         self.appointment_service = AppointmentService(appointment_repository)
 
     def get(self, appointment_id):
@@ -36,7 +37,7 @@ class AppointmentHandler(BaseHandler):
         # TODO: Consolidate "error" and "errors" response fields into just "errors"
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_result.errors})
             return
 
         if service_result.result_type == ResultType.BUSINESS_ERROR:
@@ -58,7 +59,7 @@ class AppointmentHandler(BaseHandler):
 
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERRORS: service_result.errors})
             return
 
         if service_result.result_type == ResultType.BUSINESS_ERROR:

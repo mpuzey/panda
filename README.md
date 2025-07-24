@@ -58,12 +58,12 @@ curl http://localhost:8888/api/patients/1373645350
 
 ### Creating a new patient
 ```
-curl -X POST http://localhost:8888/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+curl -X POST http://localhost:8888/api/patients/9876543210 -d '{"nhs_number": "9876543210", "name": "Dr M Puzey", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
 ### Updating patient details
 ```
-curl -X PUT http://localhost:8888/api/patients/1373645351 -d '{"nhs_number": "1373645351", "name": "Dr M Close", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
+curl -X PUT http://localhost:8888/api/patients/9876543210 -d '{"nhs_number": "9876543210", "name": "Dr M Close", "date_of_birth": "1996-02-01", "postcode": "N6 2FA"}'
 ```
 
 ### Deleting a patient
@@ -84,12 +84,12 @@ curl http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b9
 
 ### Creating an appointment 
 ```
-curl -X POST http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
+curl -X POST http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "9876543210", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Holloway", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
 ### Updating an appointment
 ```
-curl -X PUT http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "1373645351", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Close", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
+curl -X PUT http://localhost:8888/api/appointments/ac9729b5-5e11-42b4-87e2-6396b4faf1b0 -d '{"patient": "9876543210", "status": "attended", "time": "2018-01-21T16:30:00+00:00", "duration": "15m", "clinician": "Jason Close", "department": "oncology", "postcode": "UB56 7XQ", "id": "ac9729b5-5e11-42b4-87e2-6396b4faf1b0"}'
 ```
 
 ### Cancelling an appointment
@@ -138,7 +138,7 @@ The client has elucidated the following hard requirements for the MVP:
 
 There are some additional requirements for the data:
 * Appointments can be cancelled, but cancelled appointments cannot be reinstated.  ✅
-* Appointments should be considered 'missed' if they are not set to 'attended' by the end of the appointment. ❌
+* Appointments should be considered 'missed' if they are not set to 'attended' by the end of the appointment. ❌ - Some cron could be implemented to scan the db of appointments and update any past appointments to missed if not attended
 * Ensure that all NHS numbers are checksum validated. ✅  
 * Ensure that all postcodes can be coerced into the correct format. ✅ 
 
@@ -153,7 +153,7 @@ Additional Considerations
 As you've worked with the client for a while, you have an awareness of some past issues and upcoming work that it might be worth taking into consideration:
 * The client has been burned by vendor lock-in in the past, and prefers working with smaller frameworks. ✅ 
 * The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅  
-* The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ❌ - MongoDB used for persistence for now, can be swapped out easily
+* The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ✅ - Repository pattern implemented to make the solution database agnostic, new databases can easily be adopted by using a new repository
 * The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌
 * The PANDA currently doesn't contain much data about clinicians, but will eventually track data about the specific organisations they currently work for and where they work from. ❌
 * The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌
