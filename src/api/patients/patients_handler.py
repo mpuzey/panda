@@ -13,10 +13,10 @@ class PatientsHandler(BaseHandler):
         self.patient_service = PatientService(database_client)
 
     def get(self):
-        response = self.patient_service.get_all_patients()
+        service_result = self.patient_service.get_all_patients()
 
         # TODO: Convert BSON objects to JSON for response and move this cleanup to mongo layer
-        patients_bson_string = bson_dumps(response.data)
+        patients_bson_string = bson_dumps(service_result.data)
         patients_json = json.loads(patients_bson_string)
 
         self.set_status(200)

@@ -25,8 +25,8 @@ class PatientService:
         if errors:
             return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
 
-        result = self.mongo_database.create(patient)
-        if not result.acknowledged:
+        mongodb_response = self.mongo_database.create(patient)
+        if not mongodb_response.acknowledged:
             return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_CREATE_PATIENT])
 
         return ServiceResult(
@@ -40,8 +40,8 @@ class PatientService:
         if errors:
             return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
 
-        result = self.mongo_database.update({PATIENT_FIELD_NHS_NUMBER: nhs_number}, patient)
-        if not result.acknowledged:
+        mongodb_response = self.mongo_database.update({PATIENT_FIELD_NHS_NUMBER: nhs_number}, patient)
+        if not mongodb_response.acknowledged:
             return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_PATIENT])
 
         return ServiceResult(
@@ -51,24 +51,24 @@ class PatientService:
 
     def get_patient(self, nhs_number):
         """Get a patient by NHS number."""
-        result = self.mongo_database.get({PATIENT_FIELD_NHS_NUMBER: nhs_number})
-        if not result:
+        mongodb_response = self.mongo_database.get({PATIENT_FIELD_NHS_NUMBER: nhs_number})
+        if not mongodb_response:
             return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_PATIENT_NOT_FOUND])
 
         return ServiceResult(
             ResultType.SUCCESS,
             data={
-                'nhs_number': result.get('nhs_number'),
-                'name': result.get('name'),
-                'date_of_birth': result.get('date_of_birth'),
-                'postcode': result.get('postcode')
+                'nhs_number': mongodb_response.get('nhs_number'),
+                'name': mongodb_response.get('name'),
+                'date_of_birth': mongodb_response.get('date_of_birth'),
+                'postcode': mongodb_response.get('postcode')
             }
         )
 
     def delete_patient(self, nhs_number):
         """Delete a patient by NHS number."""
-        result = self.mongo_database.delete({PATIENT_FIELD_NHS_NUMBER: nhs_number})
-        if not result.deleted_count:
+        mongodb_response = self.mongo_database.delete({PATIENT_FIELD_NHS_NUMBER: nhs_number})
+        if not mongodb_response.deleted_count:
             return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_PATIENT_NOT_FOUND])
 
         return ServiceResult(

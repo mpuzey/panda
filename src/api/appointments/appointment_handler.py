@@ -14,57 +14,57 @@ class AppointmentHandler(BaseHandler):
         self.appointment_service = AppointmentService(database_client)
 
     def get(self, appointment_id):
-        response = self.appointment_service.get_appointment(appointment_id)
+        service_result = self.appointment_service.get_appointment(appointment_id)
 
-        if response.result_type == ResultType.NOT_FOUND:
+        if service_result.result_type == ResultType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         self.set_status(200)
-        self.write(response.data)
+        self.write(service_result.data)
 
     def post(self, appointment_id):
         appointment = json.loads(self.request.body)
-        response = self.appointment_service.create_appointment(appointment, appointment_id)
+        service_result = self.appointment_service.create_appointment(appointment, appointment_id)
 
-        if response.result_type == ResultType.VALIDATION_ERROR:
+        if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, response.errors)
+            self.write_error(400, service_result.errors)
             return
 
-        if response.result_type == ResultType.DATABASE_ERROR:
+        if service_result.result_type == ResultType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         self.set_status(201)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
-        response = self.appointment_service.update_appointment(appointment, appointment_id)
+        service_result = self.appointment_service.update_appointment(appointment, appointment_id)
 
-        if response.result_type == ResultType.VALIDATION_ERROR:
+        if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, response.errors)
+            self.write_error(400, service_result.errors)
             return
 
-        if response.result_type == ResultType.DATABASE_ERROR:
+        if service_result.result_type == ResultType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         self.set_status(200)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
 
     def delete(self, appointment_id):
-        response = self.appointment_service.delete_appointment(appointment_id)
+        service_result = self.appointment_service.delete_appointment(appointment_id)
 
-        if response.result_type == ResultType.NOT_FOUND:
+        if service_result.result_type == ResultType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         self.set_status(200)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
