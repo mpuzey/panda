@@ -32,7 +32,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # Create the appointment first
         new_appointment = {
             'id': valid_uuid,
-            'patient': '0443743460',
+            'patient': '9434765919',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -70,7 +70,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
     def test_post_appointment_creates_appointment(self):
         new_appointment = {
             'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
-            'patient': '0443743460',
+            'patient': '9876543210',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -96,7 +96,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
     def test_put_appointment_updates_appointment(self):
         new_appointment = {
             'id': 'ac9729b5-5e11-42b4-87e2-6396b4faf1b1',
-            'patient': '0443743460',
+            'patient': '9876543210',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -127,7 +127,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # First create an appointment
         new_appointment = {
             'id': appointment_id,
-            'patient': '0443743460',
+            'patient': '1234567881',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -163,7 +163,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # First create an appointment
         new_appointment = {
             'id': appointment_id,
-            'patient': '0443743460',
+            'patient': '1234567881',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -190,7 +190,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # Try to recreate the cancelled appointment
         recreate_appointment = {
             'id': appointment_id,
-            'patient': '0443743460',
+            'patient': '1234567881',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -218,7 +218,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # First create an appointment
         new_appointment = {
             'id': appointment_id,
-            'patient': '0443743460',
+            'patient': '4505577104',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',
@@ -245,7 +245,7 @@ class AppointmentHandlerTests(AsyncHTTPTestCase):
         # Try to update the cancelled appointment
         update_appointment = {
             'id': appointment_id,
-            'patient': '0443743460',
+            'patient': '4505577104',  # Valid NHS number with correct checksum
             'status': 'active',
             'time': '2024-08-30T11:30:00+01:00',
             'duration': '2h',

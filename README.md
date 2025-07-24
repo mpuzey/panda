@@ -137,7 +137,7 @@ The client has elucidated the following hard requirements for the MVP:
 * Errors should be reported to the user. ✅ 
 
 There are some additional requirements for the data:
-* Appointments can be cancelled, but cancelled appointments cannot be reinstated.  ❌ - partially implemented
+* Appointments can be cancelled, but cancelled appointments cannot be reinstated.  ✅
 * Appointments should be considered 'missed' if they are not set to 'attended' by the end of the appointment. ❌
 * Ensure that all NHS numbers are checksum validated. ❌
 * Ensure that all postcodes can be coerced into the correct format. ✅ 

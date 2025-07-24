@@ -1,6 +1,6 @@
 import re
 
-from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format
+from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format, validate_nhs_number_checksum
 from constants import (
     UK_POSTCODE_VALIDATION_REGEX,
     PATIENT_FIELD_NHS_NUMBER,
@@ -23,10 +23,16 @@ def validate(patient):
     errors += check_required_fields(patient, required_fields)
 
     if errors:
-        print('Invalid appointment:', errors)
+        print('Invalid patient:', errors)
         return errors
 
-    errors += check_regex(patient['nhs_number'], NHS_NUMBER_REGEX, INVALID_NHS_NUMBER_ERROR_TEXT)
+    # Validate NHS number format and checksum
+    nhs_number = patient.get('nhs_number', '')
+    if not re.match(NHS_NUMBER_REGEX, nhs_number):
+        errors.append(INVALID_NHS_NUMBER_ERROR_TEXT)
+    elif not validate_nhs_number_checksum(nhs_number):
+        errors.append('Invalid NHS number checksum')
+
     errors += check_min_length(patient['name'], 3, INVALID_NAME_ERROR_TEXT)
     errors += check_date_format(
         patient['date_of_birth'], DATE_FORMAT,
@@ -36,7 +42,7 @@ def validate(patient):
     errors += validate_postcode(patient['postcode'])
 
     if errors:
-        print('Invalid appointment:', errors)
+        print('Invalid patient:', errors)
     return errors
 
 # https://ideal-postcodes.co.uk/guides/uk-postcode-format

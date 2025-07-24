@@ -25,7 +25,7 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         super().tearDown()
 
     def test_get_patient_valid_nhs_number(self):
-        valid_nhs_number = '1373645350'
+        valid_nhs_number = '9434765919'  # Valid NHS number with correct checksum
         self.test_patient_nhs_numbers.append(valid_nhs_number)
         # Create the patient first
         new_patient = {
@@ -51,7 +51,7 @@ class PatientHandlerTests(AsyncHTTPTestCase):
 
     def test_post_patient_creates_patient(self):
         new_patient = {
-            'nhs_number': '1373645351',
+            'nhs_number': '9876543210',  # Valid NHS number with correct checksum
             'name': 'Dr Glenn Clark',
             'date_of_birth': '1996-02-01',
             'postcode': 'N6 2FA'
@@ -59,7 +59,7 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         self.test_patient_nhs_numbers.append(new_patient['nhs_number'])
 
         response = self.fetch(
-            f'/api/patients/1373645351',
+            f'/api/patients/{new_patient["nhs_number"]}',
             method='POST',
             body=json.dumps(new_patient),
             headers={'Content-Type': 'application/json'}
@@ -68,11 +68,11 @@ class PatientHandlerTests(AsyncHTTPTestCase):
         self.assertEqual(response.code, 201)
         body = json.loads(response.body)
 
-        expected_body = {'message': 'new patient added: 1373645351'}
+        expected_body = {'message': f'new patient added: {new_patient["nhs_number"]}'}
         self.assertEqual(body, expected_body)
 
     def test_put_patient_updates_patient(self):
-        nhs_number = '1373645351'
+        nhs_number = '1234567881'  # Valid NHS number with correct checksum
         self.test_patient_nhs_numbers.append(nhs_number)
         # Create the patient first
         new_patient = {
