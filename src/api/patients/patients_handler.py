@@ -15,11 +15,9 @@ class PatientsHandler(BaseHandler):
     def get(self):
         response = self.patient_service.get_all_patients()
 
-        if response.result_type == ResultType.SUCCESS:
-            # TODO: Convert BSON objects to JSON for response and move this cleanup to service
-            patients_bson_string = bson_dumps(response.data)
-            patients_json = json.loads(patients_bson_string)
+        # TODO: Convert BSON objects to JSON for response and move this cleanup to service
+        patients_bson_string = bson_dumps(response.data)
+        patients_json = json.loads(patients_bson_string)
 
-            self.set_status(200)
-            self.write({PANDA_RESPONSE_FIELD_PATIENTS: patients_json})
-            return
+        self.set_status(200)
+        self.write({PANDA_RESPONSE_FIELD_PATIENTS: patients_json})

@@ -15,12 +15,10 @@ class AppointmentsHandler(BaseHandler):
     def get(self):
         response = self.appointment_service.get_all_appointments()
 
-        if response.result_type == ResultType.SUCCESS:
-            # TODO: Convert BSON objects to JSON for response and move this cleanup to service
-            appointments_bson_string = bson_dumps(response.data)
-            appointments_json = json.loads(appointments_bson_string)
+        # TODO: Convert BSON objects to JSON for response and move this cleanup to service
+        appointments_bson_string = bson_dumps(response.data)
+        appointments_json = json.loads(appointments_bson_string)
 
-            self.set_status(200)
-            self.write({PANDA_RESPONSE_FIELD_APPOINTMENTS: appointments_json})
-            return
+        self.set_status(200)
+        self.write({PANDA_RESPONSE_FIELD_APPOINTMENTS: appointments_json})
 

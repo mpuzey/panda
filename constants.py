@@ -37,12 +37,16 @@ HEADER_ALLOW_HEADERS_VALUE = (
 )
 HEADER_ALLOW_METHODS_VALUE = 'GET, OPTIONS'
 
-# Field Names
+# Handler Field Key Names
+HANDLER_FIELD_DATABASE_CLIENT = 'database_client'
+
+# Patient Dict Key Names
 PATIENT_FIELD_NHS_NUMBER = 'nhs_number'
 PATIENT_FIELD_NAME = 'name'
 PATIENT_FIELD_DATE_OF_BIRTH = 'date_of_birth'
 PATIENT_FIELD_POSTCODE = 'postcode'
 
+# Appointment Dict Key Names
 APPOINTMENT_FIELD_PATIENT = 'patient'
 APPOINTMENT_FIELD_STATUS = 'status'
 APPOINTMENT_FIELD_TIME = 'time'
@@ -52,6 +56,7 @@ APPOINTMENT_FIELD_DEPARTMENT = 'department'
 APPOINTMENT_FIELD_ID = 'id'
 APPOINTMENT_FIELD_POSTCODE = 'postcode'
 
+# Patient Service Result Field Names
 PATIENT_SERVICE_FIELD_ERROR = 'error'
 PATIENT_SERVICE_FIELD_VALIDATION_ERRORS = 'errors'
 # HTTP status code not to be confused with appointment status
@@ -60,7 +65,7 @@ PATIENT_SERVICE_FIELD_MESSAGE = 'message'
 PATIENT_SERVICE_FIELD_PATIENT = 'patient'
 PATIENT_SERVICE_FIELD_PATIENTS = 'patients'
 
-
+# Appointment Service Result Field Names
 APPOINTMENT_SERVICE_FIELD_ERROR = 'error'
 APPOINTMENT_SERVICE_FIELD_VALIDATION_ERRORS = 'errors'
 # HTTP status code not to be confused with appointment status
@@ -69,6 +74,7 @@ APPOINTMENT_SERVICE_FIELD_MESSAGE = 'message'
 APPOINTMENT_SERVICE_FIELD_APPOINTMENT = 'appointment'
 APPOINTMENT_SERVICE_FIELD_APPOINTMENTS = 'appointments'
 
+# PANDA Response Field Names
 PANDA_RESPONSE_FIELD_ERROR = 'error'
 PANDA_RESPONSE_FIELD_MESSAGE = 'message'
 PANDA_RESPONSE_FIELD_PATIENTS = 'patients'

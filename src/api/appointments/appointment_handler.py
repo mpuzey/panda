@@ -21,10 +21,8 @@ class AppointmentHandler(BaseHandler):
             self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
             return
 
-        if response.result_type == ResultType.SUCCESS:
-            self.set_status(200)
-            self.write(response.data)
-            return
+        self.set_status(200)
+        self.write(response.data)
 
     def post(self, appointment_id):
         appointment = json.loads(self.request.body)
@@ -40,10 +38,8 @@ class AppointmentHandler(BaseHandler):
             self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
             return
 
-        if response.result_type == ResultType.SUCCESS:
-            self.set_status(201)
-            self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
-            return
+        self.set_status(201)
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
@@ -59,10 +55,8 @@ class AppointmentHandler(BaseHandler):
             self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
             return
 
-        if response.result_type == ResultType.SUCCESS:
-            self.set_status(200)
-            self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
-            return
+        self.set_status(200)
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
 
     def delete(self, appointment_id):
         response = self.appointment_service.delete_appointment(appointment_id)
@@ -72,7 +66,5 @@ class AppointmentHandler(BaseHandler):
             self.write({PANDA_RESPONSE_FIELD_ERROR: response.errors[0]})
             return
 
-        if response.result_type == ResultType.SUCCESS:
-            self.set_status(200)
-            self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
-            return
+        self.set_status(200)
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: response.message})
