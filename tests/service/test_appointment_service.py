@@ -39,7 +39,8 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
-        self.assertEqual(response.message, MSG_NEW_APPOINTMENT_ADDED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
+        self.assertEqual(response.message['key'], MSG_NEW_APPOINTMENT_ADDED)
+        self.assertEqual(response.message['params']['appointment_id'], '01542f70-929f-4c9a-b4fa-e672310d7e78')
         self.mock_mongo_database.create.assert_called_once_with(self.valid_appointment)
 
     def test_create_appointment_validation_error(self):
@@ -50,7 +51,11 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.create_appointment(invalid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.VALIDATION_ERROR)
-        assert 'Invalid' in response.errors[0]
+        # Check for validation error (could be in different error formats)
+        validation_errors = [e for e in response.errors if 
+                           (isinstance(e, dict) and 'invalid' in e.get('key', '')) or
+                           (isinstance(e, str) and 'Invalid' in e)]
+        self.assertTrue(len(validation_errors) > 0)
 
     def test_create_appointment_database_error(self):
         """Test appointment creation when database operation fails."""
@@ -59,7 +64,7 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.DATABASE_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_CREATE_APPOINTMENT)
+        self.assertEqual(response.errors[0]['key'], ERR_COULD_NOT_CREATE_APPOINTMENT)
 
     def test_create_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test a cancelled appointment cannot be recreated."""
@@ -70,7 +75,7 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.create_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
         self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
+        self.assertEqual(response.errors[0]['key'], ERR_COULD_NOT_UPDATE_APPOINTMENT)
         self.mock_mongo_database.update.assert_not_called()
 
     def test_update_appointment_success(self):
@@ -80,7 +85,8 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.update_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
-        self.assertEqual(response.message, MSG_APPOINTMENT_UPDATED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
+        self.assertEqual(response.message['key'], MSG_APPOINTMENT_UPDATED)
+        self.assertEqual(response.message['params']['appointment_id'], '01542f70-929f-4c9a-b4fa-e672310d7e78')
         self.mock_mongo_database.update.assert_called_once_with({'id': '01542f70-929f-4c9a-b4fa-e672310d7e78'}, self.valid_appointment)
 
     def test_update_appointment_validation_error(self):
@@ -91,7 +97,11 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.update_appointment(invalid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.VALIDATION_ERROR)
-        assert 'Invalid' in response.errors[0]
+        # Check for validation error (could be in different error formats)
+        validation_errors = [e for e in response.errors if 
+                           (isinstance(e, dict) and 'invalid' in e.get('key', '')) or
+                           (isinstance(e, str) and 'Invalid' in e)]
+        self.assertTrue(len(validation_errors) > 0)
 
     def test_update_appointment_database_error(self):
         """Test appointment update when database operation fails."""
@@ -100,7 +110,7 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.update_appointment(self.valid_appointment, '01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.DATABASE_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
+        self.assertEqual(response.errors[0]['key'], ERR_COULD_NOT_UPDATE_APPOINTMENT)
 
     def test_update_appointment_cancelled_appointment_cannot_be_reinstated(self):
         """Test that a cancelled appointment cannot be reinstated with an update."""
@@ -114,7 +124,7 @@ class TestAppointmentService(unittest.TestCase):
                                                                '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
         self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
+        self.assertEqual(response.errors[0]['key'], ERR_COULD_NOT_UPDATE_APPOINTMENT)
         self.mock_mongo_database.update.assert_not_called()
 
     def test_get_appointment_success(self):
@@ -143,7 +153,7 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.get_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.NOT_FOUND)
-        self.assertEqual(response.errors[0], ERR_APPOINTMENT_NOT_FOUND)
+        self.assertEqual(response.errors[0]['key'], ERR_APPOINTMENT_NOT_FOUND)
 
     def test_delete_appointment_success(self):
         """Test successful appointment deletion."""
@@ -152,7 +162,8 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.delete_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
-        self.assertEqual(response.message, MSG_APPOINTMENT_CANCELLED.format('01542f70-929f-4c9a-b4fa-e672310d7e78'))
+        self.assertEqual(response.message['key'], MSG_APPOINTMENT_CANCELLED)
+        self.assertEqual(response.message['params']['appointment_id'], '01542f70-929f-4c9a-b4fa-e672310d7e78')
         self.mock_mongo_database.delete.assert_called_once_with({'id': '01542f70-929f-4c9a-b4fa-e672310d7e78'})
 
     def test_delete_appointment_not_found(self):
@@ -162,7 +173,7 @@ class TestAppointmentService(unittest.TestCase):
         response = self.appointment_service.delete_appointment('01542f70-929f-4c9a-b4fa-e672310d7e78')
         
         self.assertEqual(response.result_type, ResultType.NOT_FOUND)
-        self.assertEqual(response.errors[0], ERR_APPOINTMENT_NOT_FOUND)
+        self.assertEqual(response.errors[0]['key'], ERR_APPOINTMENT_NOT_FOUND)
 
     def test_get_all_appointments_success(self):
         """Test successful retrieval of all appointments."""

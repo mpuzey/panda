@@ -18,7 +18,8 @@ class AppointmentHandler(BaseHandler):
 
         if service_result.result_type == ResultType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         self.set_status(200)
@@ -31,21 +32,25 @@ class AppointmentHandler(BaseHandler):
         # TODO: Consolidate "error" and "errors" response fields into just "errors"
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write_error(400, translated_errors)
             return
 
         if service_result.result_type == ResultType.BUSINESS_ERROR:
             self.set_status(400)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         self.set_status(201)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
+        translated_message = self.translate_message(service_result.message['key'], **service_result.message['params'])
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: translated_message})
 
     def put(self, appointment_id):
         appointment = json.loads(self.request.body)
@@ -53,29 +58,35 @@ class AppointmentHandler(BaseHandler):
 
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
-            self.write_error(400, service_result.errors)
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write_error(400, translated_errors)
             return
 
         if service_result.result_type == ResultType.BUSINESS_ERROR:
             self.set_status(400)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:
             self.set_status(500)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         self.set_status(200)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
+        translated_message = self.translate_message(service_result.message['key'], **service_result.message['params'])
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: translated_message})
 
     def delete(self, appointment_id):
         service_result = self.appointment_service.delete_appointment(appointment_id)
 
         if service_result.result_type == ResultType.NOT_FOUND:
             self.set_status(404)
-            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
+            translated_errors = self.translate_errors(service_result.errors)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: translated_errors[0]})
             return
 
         self.set_status(200)
-        self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_result.message})
+        translated_message = self.translate_message(service_result.message['key'], **service_result.message['params'])
+        self.write({PANDA_RESPONSE_FIELD_MESSAGE: translated_message})

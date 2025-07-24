@@ -41,17 +41,17 @@ class AppointmentService:
             # Appointment exists, check if it's cancelled
             status = existing_appointment.data.get(APPOINTMENT_FIELD_STATUS)
             if status == STATUS_CANCELLED:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[{'key': ERR_COULD_NOT_UPDATE_APPOINTMENT, 'params': {}}])
             else:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[{'key': ERR_COULD_NOT_CREATE_APPOINTMENT, 'params': {}}])
 
         monogdb_response = self.mongo_database.create(appointment)
         if not monogdb_response.acknowledged:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
+            return ServiceResult(ResultType.DATABASE_ERROR, errors=[{'key': ERR_COULD_NOT_CREATE_APPOINTMENT, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_NEW_APPOINTMENT_ADDED.format(appointment_id)
+            message={'key': MSG_NEW_APPOINTMENT_ADDED, 'params': {'appointment_id': appointment_id}}
         )
 
     def update_appointment(self, appointment, appointment_id):
@@ -66,18 +66,18 @@ class AppointmentService:
 
         monogdb_response = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, appointment)
         if not monogdb_response.acknowledged:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+            return ServiceResult(ResultType.DATABASE_ERROR, errors=[{'key': ERR_COULD_NOT_UPDATE_APPOINTMENT, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_APPOINTMENT_UPDATED.format(appointment_id)
+            message={'key': MSG_APPOINTMENT_UPDATED, 'params': {'appointment_id': appointment_id}}
         )
 
     def get_appointment(self, appointment_id):
         """Get an appointment by ID."""
         monogdb_response = self.mongo_database.get({APPOINTMENT_FIELD_ID: appointment_id})
         if not monogdb_response:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
+            return ServiceResult(ResultType.NOT_FOUND, errors=[{'key': ERR_APPOINTMENT_NOT_FOUND, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
@@ -99,11 +99,11 @@ class AppointmentService:
         cancelled_appointment = {APPOINTMENT_FIELD_STATUS: STATUS_CANCELLED}
         mongodb_response = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, cancelled_appointment)
         if not mongodb_response.modified_count:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
+            return ServiceResult(ResultType.NOT_FOUND, errors=[{'key': ERR_APPOINTMENT_NOT_FOUND, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_APPOINTMENT_CANCELLED.format(appointment_id)
+            message={'key': MSG_APPOINTMENT_CANCELLED, 'params': {'appointment_id': appointment_id}}
         )
 
     def get_all_appointments(self):
@@ -117,5 +117,5 @@ class AppointmentService:
         if get_mongodb_response.result_type == ResultType.SUCCESS:
             status = get_mongodb_response.data.get(APPOINTMENT_FIELD_STATUS)
             if status == STATUS_CANCELLED:
-                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[{'key': ERR_COULD_NOT_UPDATE_APPOINTMENT, 'params': {}}])
         return ServiceResult(ResultType.SUCCESS)

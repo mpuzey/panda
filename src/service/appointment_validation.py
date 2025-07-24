@@ -24,6 +24,7 @@ from constants import (
     INVALID_DURATION_FORMAT_ERROR_TEXT,
     INVALID_STATUS_ERROR_TEXT,
     INVALID_PATIENT_ID_ERROR_TEXT,
+    INVALID_NHS_NUMBER_CHECKSUM_PATIENT_ERROR_TEXT,
     INVALID_CLINICIAN_ERROR_TEXT,
     INVALID_DEPARTMENT_ERROR_TEXT,
     MISSING_POSTCODE_ERROR_TEXT,
@@ -55,22 +56,23 @@ def validate_details(appointment, errors):
         try:
             UUID(appointment[APPOINTMENT_FIELD_ID])
         except ValueError:
-            errors.append(INVALID_UUID_ERROR_TEXT.format(APPOINTMENT_FIELD_ID))
+            errors.append({'key': INVALID_UUID_ERROR_TEXT, 'params': {'field': APPOINTMENT_FIELD_ID}})
     if APPOINTMENT_FIELD_TIME in appointment:
         try:
             datetime.fromisoformat(appointment[APPOINTMENT_FIELD_TIME])
         except ValueError:
-            errors.append(INVALID_ISO8601_TIME_ERROR_TEXT.format(APPOINTMENT_FIELD_TIME))
+            errors.append({'key': INVALID_ISO8601_TIME_ERROR_TEXT, 'params': {'field': APPOINTMENT_FIELD_TIME}})
     if APPOINTMENT_FIELD_DURATION in appointment:
         errors += check_regex(appointment[APPOINTMENT_FIELD_DURATION],
                               DURATION_REGEX,
-                              INVALID_DURATION_FORMAT_ERROR_TEXT.format(APPOINTMENT_FIELD_DURATION))
+                              INVALID_DURATION_FORMAT_ERROR_TEXT,
+                              field=APPOINTMENT_FIELD_DURATION)
 
     if APPOINTMENT_FIELD_STATUS in appointment:
         valid_status_list = [STATUS_ACTIVE, STATUS_ATTENDED, STATUS_CANCELLED, STATUS_MISSED]
 
         if appointment[APPOINTMENT_FIELD_STATUS] not in valid_status_list:
-            errors.append(INVALID_STATUS_ERROR_TEXT)
+            errors.append({'key': INVALID_STATUS_ERROR_TEXT, 'params': {}})
 
     return errors
 
@@ -80,9 +82,9 @@ def validate_personnel(appointment, errors):
         # Validate NHS number format and checksum
         patient_nhs_number = appointment[APPOINTMENT_FIELD_PATIENT]
         if not re.match(NHS_NUMBER_REGEX, patient_nhs_number):
-            errors.append(INVALID_PATIENT_ID_ERROR_TEXT)
+            errors.append({'key': INVALID_PATIENT_ID_ERROR_TEXT, 'params': {}})
         elif not validate_nhs_number_checksum(patient_nhs_number):
-            errors.append('Invalid NHS number checksum for patient')
+            errors.append({'key': INVALID_NHS_NUMBER_CHECKSUM_PATIENT_ERROR_TEXT, 'params': {}})
 
     if APPOINTMENT_FIELD_CLINICIAN in appointment:
         errors += check_min_length(appointment[APPOINTMENT_FIELD_CLINICIAN], 3, INVALID_CLINICIAN_ERROR_TEXT)
@@ -92,15 +94,15 @@ def validate_personnel(appointment, errors):
 def validate_location(appointment, errors):
     postcode = appointment.get(APPOINTMENT_FIELD_POSTCODE)
     if not postcode:
-        errors.append(MISSING_POSTCODE_ERROR_TEXT)
+        errors.append({'key': MISSING_POSTCODE_ERROR_TEXT, 'params': {}})
         return errors
 
     # https://ideal-postcodes.co.uk/guides/uk-postcode-format
     if not re.match(UK_POSTCODE_VALIDATION_REGEX, postcode, re.IGNORECASE):
-        errors.append(INVALID_UK_POSTCODE_ERROR_TEXT)
+        errors.append({'key': INVALID_UK_POSTCODE_ERROR_TEXT, 'params': {}})
 
     if APPOINTMENT_FIELD_DEPARTMENT in appointment:
         if not isinstance(appointment[APPOINTMENT_FIELD_DEPARTMENT], str) or not appointment[APPOINTMENT_FIELD_DEPARTMENT]:
-            errors.append(INVALID_DEPARTMENT_ERROR_TEXT)
+            errors.append({'key': INVALID_DEPARTMENT_ERROR_TEXT, 'params': {}})
 
     return errors
