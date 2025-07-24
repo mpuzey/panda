@@ -1,7 +1,16 @@
+from re import A
+from telnetlib import STATUS
 from src.db.mongo import MongoDB
 from src.service.results import ServiceResult, ResultType
 
 from constants import (
+    APPOINTMENT_FIELD_CLINICIAN,
+    APPOINTMENT_FIELD_DEPARTMENT,
+    APPOINTMENT_FIELD_DURATION,
+    APPOINTMENT_FIELD_PATIENT,
+    APPOINTMENT_FIELD_POSTCODE,
+    APPOINTMENT_FIELD_TIME,
+    APPOINTMENT_FIELD_STATUS,
     ERR_COULD_NOT_CREATE_APPOINTMENT,
     ERR_COULD_NOT_UPDATE_APPOINTMENT,
     ERR_APPOINTMENT_NOT_FOUND,
@@ -9,7 +18,8 @@ from constants import (
     MSG_APPOINTMENT_UPDATED,
     MSG_APPOINTMENT_CANCELLED,
     MONGODB_COLLECTION_APPOINTMENTS,
-    APPOINTMENT_FIELD_ID,
+    APPOINTMENT_FIELD_ID,   
+    STATUS_CANCELLED,
 )
 from src.service.appointment_validation import validate
 
@@ -39,9 +49,14 @@ class AppointmentService:
         errors = validate(appointment)
         if errors:
             return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
+        
+        get_result = self.get_appointment(appointment_id)
+        status = get_result.data.get(APPOINTMENT_FIELD_STATUS)
+        if get_result.result_type == ResultType.SUCCESS and status == STATUS_CANCELLED:
+            return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
 
-        result = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, appointment)
-        if not result.acknowledged:
+        monogdb_response = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, appointment)
+        if not monogdb_response.acknowledged:
             return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
 
         return ServiceResult(
@@ -57,15 +72,16 @@ class AppointmentService:
 
         return ServiceResult(
             ResultType.SUCCESS,
+            # Convert BSON to JSON (move to mongo layer)
             data={
-                'patient': result.get('patient'),
-                'status': result.get('status'),
-                'time': result.get('time'),
-                'duration': result.get('duration'),
-                'clinician': result.get('clinician'),
-                'department': result.get('department'),
-                'postcode': result.get('postcode'),
-                'id': result.get('id')
+                APPOINTMENT_FIELD_PATIENT: result.get(APPOINTMENT_FIELD_PATIENT),
+                APPOINTMENT_FIELD_STATUS: result.get(APPOINTMENT_FIELD_STATUS),
+                APPOINTMENT_FIELD_TIME: result.get(APPOINTMENT_FIELD_TIME),
+                APPOINTMENT_FIELD_DURATION: result.get(APPOINTMENT_FIELD_DURATION),
+                APPOINTMENT_FIELD_CLINICIAN: result.get(APPOINTMENT_FIELD_CLINICIAN),
+                APPOINTMENT_FIELD_DEPARTMENT: result.get(APPOINTMENT_FIELD_DEPARTMENT),
+                APPOINTMENT_FIELD_POSTCODE: result.get(APPOINTMENT_FIELD_POSTCODE),
+                APPOINTMENT_FIELD_ID: result.get(APPOINTMENT_FIELD_ID)
             }
         )
 

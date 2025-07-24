@@ -15,7 +15,7 @@ class AppointmentsHandler(BaseHandler):
     def get(self):
         response = self.appointment_service.get_all_appointments()
 
-        # TODO: Convert BSON objects to JSON for response and move this cleanup to service
+        # TODO: Convert BSON objects to JSON for response and move this cleanup to mongo layer
         appointments_bson_string = bson_dumps(response.data)
         appointments_json = json.loads(appointments_bson_string)
 

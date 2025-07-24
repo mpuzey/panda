@@ -1,9 +1,9 @@
 import os
 
+# TODO: Consider breaking out constants into separate files for each module
+
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_ROOT = os.path.join(ROOT_PATH, 'static')
-
-UK_POSTCODE_VALIDATION_REGEX = r'^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$'
 
 # Database and Collection Names
 MONGODB_DATABASE_NAME = 'panda'
@@ -91,6 +91,8 @@ STATUS_MISSED = 'missed'
 NHS_NUMBER_REGEX = r'^\d{10}$'
 DURATION_REGEX = r'^\d+[hm]$'
 DATE_FORMAT = '%Y-%m-%d'
+UK_POSTCODE_VALIDATION_REGEX = r'^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$'
+
 
 
 # Error/Message Templates

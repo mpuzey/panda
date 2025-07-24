@@ -83,6 +83,7 @@ class TestAppointmentService(unittest.TestCase):
                                                                '01542f70-929f-4c9a-b4fa-e672310d7e78')
 
         self.assertEqual(response.result_type, ResultType.BUSINESS_ERROR)
+        self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_APPOINTMENT)
         self.mock_mongo_database.update.assert_not_called()
 
     def test_update_appointment_validation_error(self):
