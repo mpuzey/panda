@@ -27,11 +27,11 @@ class PatientService:
 
         mongodb_response = self.mongo_database.create(patient)
         if not mongodb_response.acknowledged:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_CREATE_PATIENT])
+            return ServiceResult(ResultType.DATABASE_ERROR, errors=[{'key': ERR_COULD_NOT_CREATE_PATIENT, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_NEW_PATIENT_ADDED.format(nhs_number)
+            message={'key': MSG_NEW_PATIENT_ADDED, 'params': {'nhs_number': nhs_number}}
         )
 
     def update_patient(self, patient, nhs_number):
@@ -42,18 +42,18 @@ class PatientService:
 
         mongodb_response = self.mongo_database.update({PATIENT_FIELD_NHS_NUMBER: nhs_number}, patient)
         if not mongodb_response.acknowledged:
-            return ServiceResult(ResultType.DATABASE_ERROR, errors=[ERR_COULD_NOT_UPDATE_PATIENT])
+            return ServiceResult(ResultType.DATABASE_ERROR, errors=[{'key': ERR_COULD_NOT_UPDATE_PATIENT, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_PATIENT_UPDATED.format(nhs_number)
+            message={'key': MSG_PATIENT_UPDATED, 'params': {'nhs_number': nhs_number}}
         )
 
     def get_patient(self, nhs_number):
         """Get a patient by NHS number."""
         mongodb_response = self.mongo_database.get({PATIENT_FIELD_NHS_NUMBER: nhs_number})
         if not mongodb_response:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_PATIENT_NOT_FOUND])
+            return ServiceResult(ResultType.NOT_FOUND, errors=[{'key': ERR_PATIENT_NOT_FOUND, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
@@ -69,11 +69,11 @@ class PatientService:
         """Delete a patient by NHS number."""
         mongodb_response = self.mongo_database.delete({PATIENT_FIELD_NHS_NUMBER: nhs_number})
         if not mongodb_response.deleted_count:
-            return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_PATIENT_NOT_FOUND])
+            return ServiceResult(ResultType.NOT_FOUND, errors=[{'key': ERR_PATIENT_NOT_FOUND, 'params': {}}])
 
         return ServiceResult(
             ResultType.SUCCESS,
-            message=MSG_PATIENT_DELETED.format(nhs_number)
+            message={'key': MSG_PATIENT_DELETED, 'params': {'nhs_number': nhs_number}}
         )
 
     def get_all_patients(self):

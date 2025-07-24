@@ -12,6 +12,7 @@ from constants import (
     INVALID_DATE_FORMAT_ERROR_TEXT,
     INVALID_DATE_OF_BIRTH_ERROR_TEXT,
     INVALID_NHS_NUMBER_ERROR_TEXT,
+    INVALID_NHS_NUMBER_CHECKSUM_ERROR_TEXT,
     INVALID_NAME_ERROR_TEXT,
     INVALID_UK_POSTCODE_ERROR_TEXT
 )
@@ -29,15 +30,16 @@ def validate(patient):
     # Validate NHS number format and checksum
     nhs_number = patient.get('nhs_number', '')
     if not re.match(NHS_NUMBER_REGEX, nhs_number):
-        errors.append(INVALID_NHS_NUMBER_ERROR_TEXT)
+        errors.append({'key': INVALID_NHS_NUMBER_ERROR_TEXT, 'params': {}})
     elif not validate_nhs_number_checksum(nhs_number):
-        errors.append('Invalid NHS number checksum')
+        errors.append({'key': INVALID_NHS_NUMBER_CHECKSUM_ERROR_TEXT, 'params': {}})
 
     errors += check_min_length(patient['name'], 3, INVALID_NAME_ERROR_TEXT)
     errors += check_date_format(
         patient['date_of_birth'], DATE_FORMAT,
         INVALID_DATE_FORMAT_ERROR_TEXT,
-        INVALID_DATE_OF_BIRTH_ERROR_TEXT
+        INVALID_DATE_OF_BIRTH_ERROR_TEXT,
+        field=PATIENT_FIELD_DATE_OF_BIRTH
     )
     errors += validate_postcode(patient['postcode'])
 
@@ -48,8 +50,8 @@ def validate(patient):
 # https://ideal-postcodes.co.uk/guides/uk-postcode-format
 def validate_postcode(value):
     if not isinstance(value, str):
-        return [INVALID_UK_POSTCODE_ERROR_TEXT]
+        return [{'key': INVALID_UK_POSTCODE_ERROR_TEXT, 'params': {}}]
         
     if not re.match(UK_POSTCODE_VALIDATION_REGEX, value.strip(), re.IGNORECASE):
-        return [INVALID_UK_POSTCODE_ERROR_TEXT]
+        return [{'key': INVALID_UK_POSTCODE_ERROR_TEXT, 'params': {}}]
     return []

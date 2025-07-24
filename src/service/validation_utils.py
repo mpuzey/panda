@@ -7,30 +7,30 @@ def check_required_fields(data, required_fields):
     for field in required_fields:
         data_field_value = data.get(field)
         if not data_field_value:
-            errors.append(f'Missing required field: {field}')
+            errors.append({'key': 'missing_required_field', 'params': {'field': field}})
     return errors
 
 
-def check_regex(value, regex, error_msg):
+def check_regex(value, regex, error_key, **params):
     if not re.fullmatch(regex, str(value)):
-        return [error_msg]
+        return [{'key': error_key, 'params': params}]
     return []
 
 
-def check_min_length(value, min_length, error_msg):
+def check_min_length(value, min_length, error_key, **params):
     if not isinstance(value, str) or len(value) < min_length:
-        return [error_msg]
+        return [{'key': error_key, 'params': params}]
     return []
 
 
-def check_date_format(value, date_format, error_msg, future_error_msg=None):
+def check_date_format(value, date_format, error_key, future_error_key=None, **params):
     try:
         dob = datetime.strptime(value, date_format).date()
-        if future_error_msg and dob > datetime.today().date():
-            return [future_error_msg]
+        if future_error_key and dob > datetime.today().date():
+            return [{'key': future_error_key, 'params': params}]
         return []
     except (ValueError, TypeError):
-        return [error_msg]
+        return [{'key': error_key, 'params': params}]
 
 
 def validate_nhs_number_checksum(nhs_number):

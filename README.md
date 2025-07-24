@@ -156,7 +156,7 @@ As you've worked with the client for a while, you have an awareness of some past
 * The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ❌ - MongoDB used for persistence for now, can be swapped out easily
 * The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌
 * The PANDA currently doesn't contain much data about clinicians, but will eventually track data about the specific organisations they currently work for and where they work from. ❌
-* The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌
+* The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ✅
 * The client would like to ensure that patient names can be represented correctly, in line with GDPR. ❌
 
 ## TODOs
