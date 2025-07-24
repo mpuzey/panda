@@ -28,9 +28,15 @@ class AppointmentHandler(BaseHandler):
         appointment = json.loads(self.request.body)
         service_result = self.appointment_service.create_appointment(appointment, appointment_id)
 
+        # TODO: Consolidate "error" and "errors" response fields into just "errors"
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
             self.write_error(400, service_result.errors)
+            return
+
+        if service_result.result_type == ResultType.BUSINESS_ERROR:
+            self.set_status(400)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:
@@ -48,6 +54,11 @@ class AppointmentHandler(BaseHandler):
         if service_result.result_type == ResultType.VALIDATION_ERROR:
             self.set_status(400)
             self.write_error(400, service_result.errors)
+            return
+
+        if service_result.result_type == ResultType.BUSINESS_ERROR:
+            self.set_status(400)
+            self.write({PANDA_RESPONSE_FIELD_ERROR: service_result.errors[0]})
             return
 
         if service_result.result_type == ResultType.DATABASE_ERROR:

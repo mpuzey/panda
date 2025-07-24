@@ -35,9 +35,15 @@ class AppointmentService:
         if errors:
             return ServiceResult(ResultType.VALIDATION_ERROR, errors=errors)
 
-        get_service_result = self.prevent_cancelled_appointment_from_being_updated(appointment_id)
-        if get_service_result.result_type == ResultType.BUSINESS_ERROR:
-            return get_service_result
+        # Check if appointment already exists
+        existing_appointment = self.get_appointment(appointment_id)
+        if existing_appointment.result_type == ResultType.SUCCESS:
+            # Appointment exists, check if it's cancelled
+            status = existing_appointment.data.get(APPOINTMENT_FIELD_STATUS)
+            if status == STATUS_CANCELLED:
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
+            else:
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_CREATE_APPOINTMENT])
 
         monogdb_response = self.mongo_database.create(appointment)
         if not monogdb_response.acknowledged:
@@ -90,8 +96,9 @@ class AppointmentService:
 
     def delete_appointment(self, appointment_id):
         """Delete an appointment by ID."""
-        mongodb_response = self.mongo_database.delete({APPOINTMENT_FIELD_ID: appointment_id})
-        if not mongodb_response.deleted_count:
+        cancelled_appointment = {APPOINTMENT_FIELD_STATUS: STATUS_CANCELLED}
+        mongodb_response = self.mongo_database.update({APPOINTMENT_FIELD_ID: appointment_id}, cancelled_appointment)
+        if not mongodb_response.modified_count:
             return ServiceResult(ResultType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
 
         return ServiceResult(
@@ -107,8 +114,8 @@ class AppointmentService:
     def prevent_cancelled_appointment_from_being_updated(self, appointment_id):
         """Prevent a cancelled appointment from being updated."""
         get_mongodb_response = self.get_appointment(appointment_id)
-        status = get_mongodb_response.data.get(APPOINTMENT_FIELD_STATUS)
-        if get_mongodb_response.result_type == ResultType.SUCCESS and status == STATUS_CANCELLED:
-            return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
-
+        if get_mongodb_response.result_type == ResultType.SUCCESS:
+            status = get_mongodb_response.data.get(APPOINTMENT_FIELD_STATUS)
+            if status == STATUS_CANCELLED:
+                return ServiceResult(ResultType.BUSINESS_ERROR, errors=[ERR_COULD_NOT_UPDATE_APPOINTMENT])
         return ServiceResult(ResultType.SUCCESS)
