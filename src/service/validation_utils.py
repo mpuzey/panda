@@ -57,7 +57,7 @@ def validate_nhs_number_checksum(nhs_number):
 
     # Step 2: Add the results together
     total = sum(multiplications)
-    
+
     # Step 3: Divide by 11 and get remainder
     remainder = total % 11
     
