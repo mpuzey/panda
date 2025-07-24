@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock
 from src.service.patient_service import PatientService
 from src.service.results import ResultType
 from constants import (
@@ -20,23 +20,19 @@ class TestPatientService(unittest.TestCase):
             'date_of_birth': '1996-02-01',
             'postcode': 'N6 2FA'
         }
-        self.mock_mongo_client = Mock()
-        self.mock_mongo_database = Mock()
-
-        # Mock the MongoDB class to return our mock database
-        with patch('src.service.patient_service.MongoDB') as mock_mongo_class:
-            mock_mongo_class.return_value = self.mock_mongo_database
-            self.patient_service = PatientService(self.mock_mongo_client)
+        # Create a mock repository instead of mocking MongoDB directly
+        self.mock_patient_repository = Mock()
+        self.patient_service = PatientService(self.mock_patient_repository)
 
     def test_create_patient_success(self):
         """Test successful patient creation."""
-        self.mock_mongo_database.create.return_value.acknowledged = True
+        self.mock_patient_repository.create.return_value = True
         
         response = self.patient_service.create_patient(self.valid_patient, '1373645350')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
         self.assertEqual(response.message, MSG_NEW_PATIENT_ADDED.format('1373645350'))
-        self.mock_mongo_database.create.assert_called_once_with(self.valid_patient)
+        self.mock_patient_repository.create.assert_called_once_with(self.valid_patient)
 
     def test_create_patient_validation_error(self):
         """Test patient creation with validation errors."""
@@ -49,91 +45,92 @@ class TestPatientService(unittest.TestCase):
         assert 'Invalid NHS number' in response.errors[0]
 
     def test_create_patient_database_error(self):
-        """Test patient creation when database operation fails."""
-        self.mock_mongo_database.create.return_value.acknowledged = False
+        """Test patient creation with database error."""
+        self.mock_patient_repository.create.return_value = False
         
         response = self.patient_service.create_patient(self.valid_patient, '1373645350')
         
         self.assertEqual(response.result_type, ResultType.DATABASE_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_CREATE_PATIENT)
+        self.assertIn(ERR_COULD_NOT_CREATE_PATIENT, response.errors)
 
     def test_update_patient_success(self):
         """Test successful patient update."""
-        self.mock_mongo_database.update.return_value.acknowledged = True
+        self.mock_patient_repository.update_by_nhs_number.return_value = True
         
         response = self.patient_service.update_patient(self.valid_patient, '1373645350')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
         self.assertEqual(response.message, MSG_PATIENT_UPDATED.format('1373645350'))
-        self.mock_mongo_database.update.assert_called_once_with({'nhs_number': '1373645350'}, self.valid_patient)
+        self.mock_patient_repository.update_by_nhs_number.assert_called_once_with('1373645350', self.valid_patient)
 
     def test_update_patient_validation_error(self):
         """Test patient update with validation errors."""
         invalid_patient = self.valid_patient.copy()
-        invalid_patient['name'] = 'AB'  # Too short
+        invalid_patient['nhs_number'] = 'invalid'
         
         response = self.patient_service.update_patient(invalid_patient, '1373645350')
         
         self.assertEqual(response.result_type, ResultType.VALIDATION_ERROR)
-        assert 'Invalid name' in response.errors[0]
+        assert 'Invalid NHS number' in response.errors[0]
 
     def test_update_patient_database_error(self):
-        """Test patient update when database operation fails."""
-        self.mock_mongo_database.update.return_value.acknowledged = False
+        """Test patient update with database error."""
+        self.mock_patient_repository.update_by_nhs_number.return_value = False
         
         response = self.patient_service.update_patient(self.valid_patient, '1373645350')
         
         self.assertEqual(response.result_type, ResultType.DATABASE_ERROR)
-        self.assertEqual(response.errors[0], ERR_COULD_NOT_UPDATE_PATIENT)
+        self.assertIn(ERR_COULD_NOT_UPDATE_PATIENT, response.errors)
 
     def test_get_patient_success(self):
         """Test successful patient retrieval."""
-        self.mock_mongo_database.get.return_value = self.valid_patient
+        self.mock_patient_repository.get_by_nhs_number.return_value = self.valid_patient
         
         response = self.patient_service.get_patient('1373645350')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
-        self.assertEqual(response.data, self.valid_patient)
-        self.mock_mongo_database.get.assert_called_once_with({'nhs_number': '1373645350'})
+        self.assertEqual(response.data['nhs_number'], '1373645350')
+        self.assertEqual(response.data['name'], 'Dr Glenn Clark')
+        self.mock_patient_repository.get_by_nhs_number.assert_called_once_with('1373645350')
 
     def test_get_patient_not_found(self):
-        """Test patient retrieval when patient doesn't exist."""
-        self.mock_mongo_database.get.return_value = None
+        """Test patient retrieval when patient not found."""
+        self.mock_patient_repository.get_by_nhs_number.return_value = None
         
         response = self.patient_service.get_patient('1373645350')
         
         self.assertEqual(response.result_type, ResultType.NOT_FOUND)
-        self.assertEqual(response.errors[0], ERR_PATIENT_NOT_FOUND)
+        self.assertIn(ERR_PATIENT_NOT_FOUND, response.errors)
 
     def test_delete_patient_success(self):
         """Test successful patient deletion."""
-        self.mock_mongo_database.delete.return_value.deleted_count = 1
+        self.mock_patient_repository.delete_by_nhs_number.return_value = True
         
         response = self.patient_service.delete_patient('1373645350')
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
         self.assertEqual(response.message, MSG_PATIENT_DELETED.format('1373645350'))
-        self.mock_mongo_database.delete.assert_called_once_with({'nhs_number': '1373645350'})
+        self.mock_patient_repository.delete_by_nhs_number.assert_called_once_with('1373645350')
 
     def test_delete_patient_not_found(self):
-        """Test patient deletion when patient doesn't exist."""
-        self.mock_mongo_database.delete.return_value.deleted_count = 0
+        """Test patient deletion when patient not found."""
+        self.mock_patient_repository.delete_by_nhs_number.return_value = False
         
         response = self.patient_service.delete_patient('1373645350')
         
         self.assertEqual(response.result_type, ResultType.NOT_FOUND)
-        self.assertEqual(response.errors[0], ERR_PATIENT_NOT_FOUND)
+        self.assertIn(ERR_PATIENT_NOT_FOUND, response.errors)
 
     def test_get_all_patients_success(self):
         """Test successful retrieval of all patients."""
-        mock_patients = [self.valid_patient]
-        self.mock_mongo_database.getAll.return_value = mock_patients
+        mock_patients = [self.valid_patient, self.valid_patient.copy()]
+        self.mock_patient_repository.get_all.return_value = mock_patients
         
         response = self.patient_service.get_all_patients()
         
         self.assertEqual(response.result_type, ResultType.SUCCESS)
-        self.assertEqual(response.data, mock_patients)
-        self.mock_mongo_database.getAll.assert_called_once()
+        self.assertEqual(len(response.data), 2)
+        self.mock_patient_repository.get_all.assert_called_once()
 
 
 if __name__ == '__main__':

@@ -3,6 +3,7 @@ import json
 from src.api.base_handler import BaseHandler
 from src.service.appointment_service import AppointmentService
 from src.service.results import ResultType
+from src.repository.repository_factory import RepositoryFactory, DatabaseType
 from constants import (
     PANDA_RESPONSE_FIELD_ERROR,
     PANDA_RESPONSE_FIELD_MESSAGE,
@@ -11,7 +12,11 @@ from constants import (
 
 class AppointmentHandler(BaseHandler):
     def initialize(self, database_client):
-        self.appointment_service = AppointmentService(database_client)
+        appointment_repository = RepositoryFactory.create_appointment_repository(
+            DatabaseType.MONGODB,
+            database_client
+        )
+        self.appointment_service = AppointmentService(appointment_repository)
 
     def get(self, appointment_id):
         service_result = self.appointment_service.get_appointment(appointment_id)
