@@ -1,7 +1,5 @@
-import json
 from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
-from bson.json_util import dumps as bson_dumps
 from constants import (
     PANDA_RESPONSE_FIELD_PATIENTS
 )
@@ -19,9 +17,5 @@ class PatientsHandler(BaseHandler):
     def get(self):
         service_response = self.patient_service.get_all_patients()
 
-        # TODO: Convert BSON objects to JSON for response and move this cleanup to mongo layer
-        patients_bson_string = bson_dumps(service_response.data)
-        patients_json = json.loads(patients_bson_string)
-
         self.set_status(200)
-        self.write({PANDA_RESPONSE_FIELD_PATIENTS: patients_json})
+        self.write({PANDA_RESPONSE_FIELD_PATIENTS: service_response.data})
