@@ -74,7 +74,7 @@ class PatientHandlerTests(AsyncHTTPTestCase):
     def test_post_patient_with_comprehensive_unicode_name(self):
         """Test GDPR compliance end to end: patient name with comprehensive diacritical marks and Unicode characters"""
         unicode_name = 'José María Françoéis Müller-Søren Dvořák 刘桂荣 जगन्नाथ'
-        valid_nhs_number = '8234567890'
+        valid_nhs_number = '8234567896'
         self.test_patient_nhs_numbers.append(valid_nhs_number)
 
         patient_data = {
