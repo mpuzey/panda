@@ -102,6 +102,39 @@ class TestValidatePatientData(unittest.TestCase):
                 errors = validate(data)
                 assert expected_error in errors
 
+        # Unicode/GDPR Compliance Tests
+    def test_european_names(self):
+        """Test that patient names with European diacritical marks are valid"""
+        unicode_names = [
+            'José María García-Pérez',  # Spanish
+            'François Müller-Déjà',     # French
+            'Åse Bjørn-Sørensen',       # Nordic
+            'Václav Dvořák',            # Czech
+        ]
+
+        for name in unicode_names:
+            with self.subTest(name=name):
+                patient = self.valid_patient.copy()
+                patient['name'] = name
+                errors = validate(patient)
+                self.assertEqual(errors, [], f"Unicode name '{name}' should be valid")
+
+    def test_non_latin_names(self):
+        """Test that patient names with non-Latin scripts are valid"""
+        unicode_names = [
+            '刘桂荣',              # Chinese
+            'जगन्नाथ मणि',        # Hindi/Devanagari
+            'محمد احمد',           # Arabic
+            'Владимир Петров',     # Cyrillic
+        ]
+
+        for name in unicode_names:
+            with self.subTest(name=name):
+                patient = self.valid_patient.copy()
+                patient['name'] = name
+                errors = validate(patient)
+                self.assertEqual(errors, [], f"Unicode name '{name}' should be valid")
+
     def test_invalid_date_of_birth(self):
         invalid_dobs = [
             ('01/02/1996', f'Invalid date format for date_of_birth. Expected "{READABLE_DATE_FORMAT}"'),

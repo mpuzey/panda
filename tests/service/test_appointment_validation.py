@@ -122,6 +122,5 @@ class TestValidation(unittest.TestCase):
         errors = validate(appointment)
         assert INVALID_CLINICIAN_ERROR_TEXT in errors
 
-
 if __name__ == '__main__':
     unittest.main()

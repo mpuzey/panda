@@ -154,10 +154,10 @@ As you've worked with the client for a while, you have an awareness of some past
 * The client has been burned by vendor lock-in in the past, and prefers working with smaller frameworks. ✅ 
 * The client highly values automated tests, particularly those which ensure their business logic is implemented correctly. ✅  
 * The client is in negotiation with several database vendors, and is interested in being database-agnostic if possible. ✅ - Repository pattern implemented to make the solution database agnostic, new databases can easily be adopted by using a new repository
-* The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌
+* The client is somewhat concerned that missed appointments waste significant amounts of clinicians' time, and is interested in tracking the impact this has over time on a per-clinician and per-department basis. ❌ - Queries could be run against the db to pull any missed appointments
 * The PANDA currently doesn't contain much data about clinicians, but will eventually track data about the specific organisations they currently work for and where they work from. ❌
-* The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌
-* The client would like to ensure that patient names can be represented correctly, in line with GDPR. ❌
+* The client is interested in branching out into foreign markets, it would be useful if error messages could be localised. ❌ - see branch for Work in progress attempt at this
+* The client would like to ensure that patient names can be represented correctly, in line with GDPR. ✅ - All names are handled with utf-8 encoding to ensure GDPR compliance and testing is in place around this
 
 ## TODOs
 There are a number of TODOs scattered throughout this project regarding further iterations of this implementation. These include,

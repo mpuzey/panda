@@ -49,6 +49,9 @@ PATIENT_FIELD_NAME = 'name'
 PATIENT_FIELD_DATE_OF_BIRTH = 'date_of_birth'
 PATIENT_FIELD_POSTCODE = 'postcode'
 
+# MongoDB Constants
+BSON_OBJECT_ID = '_id'
+
 # Appointment Dict Key Names
 APPOINTMENT_FIELD_PATIENT = 'patient'
 APPOINTMENT_FIELD_STATUS = 'status'
