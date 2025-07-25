@@ -2,12 +2,6 @@ from src.repository.appointment import AppointmentRepository
 from src.service.results import ServiceResponse, ResponseType
 
 from constants import (
-    APPOINTMENT_FIELD_CLINICIAN,
-    APPOINTMENT_FIELD_DEPARTMENT,
-    APPOINTMENT_FIELD_DURATION,
-    APPOINTMENT_FIELD_PATIENT,
-    APPOINTMENT_FIELD_POSTCODE,
-    APPOINTMENT_FIELD_TIME,
     APPOINTMENT_FIELD_STATUS,
     ERR_COULD_NOT_CREATE_APPOINTMENT,
     ERR_COULD_NOT_UPDATE_APPOINTMENT,
@@ -15,7 +9,6 @@ from constants import (
     MSG_NEW_APPOINTMENT_ADDED,
     MSG_APPOINTMENT_UPDATED,
     MSG_APPOINTMENT_CANCELLED,
-    APPOINTMENT_FIELD_ID,
     STATUS_CANCELLED,
 )
 from src.service.appointment_validation import validate
@@ -81,20 +74,7 @@ class AppointmentService:
         if not appointment_data:
             return ServiceResponse(ResponseType.NOT_FOUND, errors=[ERR_APPOINTMENT_NOT_FOUND])
 
-        return ServiceResponse(
-            ResponseType.SUCCESS,
-            # TODO: Convert BSON to JSON (move to mongo layer)
-            data={
-                APPOINTMENT_FIELD_PATIENT: appointment_data.get(APPOINTMENT_FIELD_PATIENT),
-                APPOINTMENT_FIELD_STATUS: appointment_data.get(APPOINTMENT_FIELD_STATUS),
-                APPOINTMENT_FIELD_TIME: appointment_data.get(APPOINTMENT_FIELD_TIME),
-                APPOINTMENT_FIELD_DURATION: appointment_data.get(APPOINTMENT_FIELD_DURATION),
-                APPOINTMENT_FIELD_CLINICIAN: appointment_data.get(APPOINTMENT_FIELD_CLINICIAN),
-                APPOINTMENT_FIELD_DEPARTMENT: appointment_data.get(APPOINTMENT_FIELD_DEPARTMENT),
-                APPOINTMENT_FIELD_POSTCODE: appointment_data.get(APPOINTMENT_FIELD_POSTCODE),
-                APPOINTMENT_FIELD_ID: appointment_data.get(APPOINTMENT_FIELD_ID)
-            }
-        )
+        return ServiceResponse(ResponseType.SUCCESS, data=appointment_data)
 
     def delete_appointment(self, appointment_id):
         """Delete an appointment by ID."""

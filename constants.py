@@ -14,8 +14,9 @@ MONGODB_COLLECTION_PATIENTS = 'patients'
 PATIENTS_FILENAME = 'example_patients.json'
 APPOINTMENTS_FILENAME = 'example_appointments.json'
 
-# MongoDB URI
+# MongoDB 
 DEFAULT_MONGODB_URI = 'mongodb://localhost:27017/'
+BSON_OBJECT_ID = '_id'
 
 # HTTP Status Codes
 HTTP_200_OK = 200

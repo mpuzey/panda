@@ -2,7 +2,7 @@ import json
 import logging
 import pymongo
 from bson.json_util import dumps as bson_dumps
-from constants import MONGODB_DATABASE_NAME
+from constants import MONGODB_DATABASE_NAME, BSON_OBJECT_ID
 
 
 class MongoDB:
@@ -29,7 +29,12 @@ class MongoDB:
         
         # Convert BSON to JSON string then back to dict to handle ObjectId and other BSON types
         bson_string = bson_dumps(bson_data)
-        return json.loads(bson_string)
+        json_data = json.loads(bson_string)
+
+        if BSON_OBJECT_ID in json_data:
+            del json_data[BSON_OBJECT_ID]
+
+        return json_data
 
     def get(self, query):
         self.logger.debug(f"Querying {self.collection_name} with: {query}")

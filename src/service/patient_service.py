@@ -8,10 +8,6 @@ from constants import (
     MSG_NEW_PATIENT_ADDED,
     MSG_PATIENT_UPDATED,
     MSG_PATIENT_DELETED,
-    PATIENT_FIELD_NHS_NUMBER,
-    PATIENT_FIELD_NAME,
-    PATIENT_FIELD_DATE_OF_BIRTH,
-    PATIENT_FIELD_POSTCODE
 )
 from src.service.patient_validation import validate
 
@@ -62,15 +58,7 @@ class PatientService:
         if not patient_data:
             return ServiceResponse(ResponseType.NOT_FOUND, errors=[ERR_PATIENT_NOT_FOUND])
 
-        return ServiceResponse(
-            ResponseType.SUCCESS,
-            data={
-                PATIENT_FIELD_NHS_NUMBER: patient_data.get(PATIENT_FIELD_NHS_NUMBER),
-                PATIENT_FIELD_NAME: patient_data.get(PATIENT_FIELD_NAME),
-                PATIENT_FIELD_DATE_OF_BIRTH: patient_data.get(PATIENT_FIELD_DATE_OF_BIRTH),
-                PATIENT_FIELD_POSTCODE: patient_data.get(PATIENT_FIELD_POSTCODE)
-            }
-        )
+        return ServiceResponse(ResponseType.SUCCESS, data=patient_data)
 
     def delete_patient(self, nhs_number):
         """Delete a patient by NHS number."""
