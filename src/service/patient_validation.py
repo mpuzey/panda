@@ -19,6 +19,7 @@ from constants import (
 
 
 def validate(patient):
+    """Validate a patient record against business rules and format requirements."""
     errors = []
     required_fields = [PATIENT_FIELD_NHS_NUMBER, PATIENT_FIELD_NAME, PATIENT_FIELD_DATE_OF_BIRTH, PATIENT_FIELD_POSTCODE]
     errors += check_required_fields(patient, required_fields)
@@ -48,6 +49,7 @@ def validate(patient):
 
 # https://ideal-postcodes.co.uk/guides/uk-postcode-format
 def validate_postcode(value):
+    """Validate a UK postcode format."""
     if not isinstance(value, str):
         return [INVALID_UK_POSTCODE_ERROR_TEXT]
         

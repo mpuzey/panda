@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 def check_required_fields(data, required_fields):
+    """Check if all required fields are present and not empty in the data."""
     errors = []
     for field in required_fields:
         data_field_value = data.get(field)
@@ -12,18 +13,21 @@ def check_required_fields(data, required_fields):
 
 
 def check_regex(value, regex, error_msg):
+    """Validate a value against a regular expression pattern."""
     if not re.fullmatch(regex, str(value)):
         return [error_msg]
     return []
 
 
 def check_min_length(value, min_length, error_msg):
+    """Check if a string value meets the minimum length requirement."""
     if not isinstance(value, str) or len(value) < min_length:
         return [error_msg]
     return []
 
 
 def check_date_format(value, date_format, error_msg, future_error_msg=None):
+    """Validate a date string against the specified format and check if it's not in the future."""
     try:
         dob = datetime.strptime(value, date_format).date()
         if future_error_msg and dob > datetime.today().date():

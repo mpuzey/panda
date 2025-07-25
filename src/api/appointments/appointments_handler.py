@@ -16,6 +16,7 @@ class AppointmentsHandler(BaseHandler):
         self.appointment_service = AppointmentService(appointment_repository)
 
     def get(self):
+        """Get all appointments."""
         service_response = self.appointment_service.get_all_appointments()
 
         self.set_status(HTTP_200_OK)

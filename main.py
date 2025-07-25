@@ -14,6 +14,7 @@ from config import MONGODB_URI, PORT, HOST
 
 
 def start_server():
+    """Start the Tornado web server and begin listening for requests."""
     app = start_app()
     app.listen(PORT, address=HOST)
     tornado.ioloop.IOLoop.current().start()

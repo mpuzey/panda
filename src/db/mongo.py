@@ -8,6 +8,7 @@ from constants import MONGODB_DATABASE_NAME, BSON_OBJECT_ID, MONGODB_SET_OPERATO
 class MongoDB:
 
     def __init__(self, client, collection_name):
+        """Initialize MongoDB connection with client and collection name."""
         # Connect to the MongoDB instance
         self.client = client
         self.db = self.client[MONGODB_DATABASE_NAME]
@@ -37,6 +38,7 @@ class MongoDB:
         return json_data
 
     def get(self, query):
+        """Retrieve a single document from the collection based on query."""
         self.logger.debug(f"Querying {self.collection_name} with: {query}")
         result = self.collection.find_one(query)
         
@@ -48,6 +50,7 @@ class MongoDB:
         return self._convert_bson_to_json(result)
 
     def getAll(self):
+        """Retrieve all documents from the collection."""
         self.logger.debug(f"Retrieving all documents from {self.collection_name}")
         cursor = self.collection.find()
         collection_documents = []
@@ -58,6 +61,7 @@ class MongoDB:
         return collection_documents
 
     def create(self, document):
+        """Create a new document in the collection."""
         self.logger.debug(f"Creating document in {self.collection_name}")
         result = self.collection.insert_one(document)
 
@@ -69,6 +73,7 @@ class MongoDB:
         return result
 
     def update(self, query, updated_values):
+        """Update an existing document in the collection."""
         self.logger.debug(f"Updating document in {self.collection_name} with query: {query}")
         new_values = {MONGODB_SET_OPERATOR: updated_values}
 
@@ -85,6 +90,7 @@ class MongoDB:
         return result
 
     def delete(self, query):
+        """Delete a document from the collection based on query."""
         self.logger.debug(f"Deleting document from {self.collection_name} with query: {query}")
         result = self.collection.delete_one(query)
 

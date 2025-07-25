@@ -24,6 +24,7 @@ class AppointmentHandler(BaseHandler):
         self.appointment_service = AppointmentService(appointment_repository)
 
     def get(self, appointment_id):
+        """Get an appointment by ID."""
         service_response = self.appointment_service.get_appointment(appointment_id)
 
         if service_response.response_type == ResponseType.NOT_FOUND:
@@ -35,6 +36,7 @@ class AppointmentHandler(BaseHandler):
         self.write(service_response.data)
 
     def post(self, appointment_id):
+        """Create a new appointment with the given ID."""
         appointment = json.loads(self.request.body)
         service_response = self.appointment_service.create_appointment(appointment, appointment_id)
 
@@ -57,6 +59,7 @@ class AppointmentHandler(BaseHandler):
         self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_response.message})
 
     def put(self, appointment_id):
+        """Update an existing appointment by ID."""
         appointment = json.loads(self.request.body)
         service_response = self.appointment_service.update_appointment(appointment, appointment_id)
 
@@ -79,6 +82,7 @@ class AppointmentHandler(BaseHandler):
         self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_response.message})
 
     def delete(self, appointment_id):
+        """Delete (cancel) an appointment by ID."""
         service_response = self.appointment_service.delete_appointment(appointment_id)
 
         if service_response.response_type == ResponseType.NOT_FOUND:

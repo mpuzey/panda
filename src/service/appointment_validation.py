@@ -34,6 +34,7 @@ from src.service.validation_utils import check_required_fields, check_regex, che
 
 
 def validate(appointment):
+    """Validate an appointment record against business rules and format requirements."""
     errors = []
     required_fields = [
         APPOINTMENT_FIELD_PATIENT, APPOINTMENT_FIELD_STATUS, APPOINTMENT_FIELD_TIME, APPOINTMENT_FIELD_DURATION,
@@ -52,6 +53,7 @@ def validate(appointment):
 
 
 def validate_details(appointment, errors):
+    """Validate appointment details like ID, time, duration, and status."""
     if APPOINTMENT_FIELD_ID in appointment:
         try:
             UUID(appointment[APPOINTMENT_FIELD_ID])
@@ -77,6 +79,7 @@ def validate_details(appointment, errors):
 
 
 def validate_personnel(appointment, errors):
+    """Validate appointment personnel including patient NHS number and clinician."""
     if APPOINTMENT_FIELD_PATIENT in appointment:
         # Validate NHS number format and checksum
         patient_nhs_number = appointment[APPOINTMENT_FIELD_PATIENT]
@@ -91,6 +94,7 @@ def validate_personnel(appointment, errors):
 
 
 def validate_location(appointment, errors):
+    """Validate appointment location including postcode and department."""
     postcode = appointment.get(APPOINTMENT_FIELD_POSTCODE)
     if not postcode:
         errors.append(MISSING_POSTCODE_ERROR_TEXT)

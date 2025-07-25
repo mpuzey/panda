@@ -23,6 +23,7 @@ class PatientHandler(BaseHandler):
         self.patient_service = PatientService(patient_repository)
 
     def get(self, nhs_number):
+        """Get a patient by NHS number."""
         service_response = self.patient_service.get_patient(nhs_number)
         
         if service_response.response_type == ResponseType.NOT_FOUND:
@@ -34,6 +35,7 @@ class PatientHandler(BaseHandler):
         self.write(service_response.data)
 
     def post(self, nhs_number):
+        """Create a new patient with the given NHS number."""
         patient = json.loads(self.request.body)
         service_response = self.patient_service.create_patient(patient, nhs_number)
         
@@ -51,6 +53,7 @@ class PatientHandler(BaseHandler):
         self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_response.message})
 
     def put(self, nhs_number):
+        """Update an existing patient by NHS number."""
         patient = json.loads(self.request.body)
         service_response = self.patient_service.update_patient(patient, nhs_number)
 
@@ -68,6 +71,7 @@ class PatientHandler(BaseHandler):
         self.write({PANDA_RESPONSE_FIELD_MESSAGE: service_response.message})
 
     def delete(self, nhs_number):
+        """Delete a patient by NHS number."""
         service_response = self.patient_service.delete_patient(nhs_number)
 
         if service_response.response_type == ResponseType.NOT_FOUND:
