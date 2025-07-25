@@ -17,12 +17,16 @@ APPOINTMENTS_FILENAME = 'example_appointments.json'
 # MongoDB 
 DEFAULT_MONGODB_URI = 'mongodb://localhost:27017/'
 BSON_OBJECT_ID = '_id'
+MONGODB_SET_OPERATOR = '$set'
+MONGODB_UNKNOWN_ID = 'unknown_id'
 
 # HTTP Status Codes
 HTTP_200_OK = 200
 HTTP_201_CREATED = 201
 HTTP_204_NO_CONTENT = 204
 HTTP_400_BAD_REQUEST = 400
+HTTP_404_NOT_FOUND = 404
+HTTP_500_INTERNAL_SERVER_ERROR = 500
 
 # HTTP Header Names and Values
 HEADER_ALLOW_ORIGIN = 'Access-Control-Allow-Origin'
@@ -48,9 +52,6 @@ PATIENT_FIELD_NHS_NUMBER = 'nhs_number'
 PATIENT_FIELD_NAME = 'name'
 PATIENT_FIELD_DATE_OF_BIRTH = 'date_of_birth'
 PATIENT_FIELD_POSTCODE = 'postcode'
-
-# MongoDB Constants
-BSON_OBJECT_ID = '_id'
 
 # Appointment Dict Key Names
 APPOINTMENT_FIELD_PATIENT = 'patient'
@@ -124,6 +125,8 @@ INVALID_DATE_OF_BIRTH_ERROR_TEXT = f'Invalid date of birth. Cannot be in the fut
 INVALID_UK_POSTCODE_ERROR_TEXT = 'Invalid UK postcode format'
 MISSING_REQUIRED_FIELD_ERROR_TEXT = 'Missing required field: {}'
 INVALID_NHS_NUMBER_ERROR_TEXT = 'Invalid NHS number. Must be a 10-digit number'
+INVALID_NHS_NUMBER_CHECKSUM_ERROR_TEXT = 'Invalid NHS number checksum'
+INVALID_NHS_NUMBER_CHECKSUM_PATIENT_ERROR_TEXT = 'Invalid NHS number checksum for patient'
 INVALID_NAME_ERROR_TEXT = 'Invalid name. Must be a non-empty string of at least 3 characters'
 INVALID_UUID_ERROR_TEXT = f'Invalid UUID format for {{}}'
 INVALID_ISO8601_TIME_ERROR_TEXT = f'Invalid ISO 8601 datetime format for {{}}'

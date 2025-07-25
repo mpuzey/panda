@@ -2,7 +2,7 @@ import json
 import logging
 import pymongo
 from bson.json_util import dumps as bson_dumps
-from constants import MONGODB_DATABASE_NAME, BSON_OBJECT_ID
+from constants import MONGODB_DATABASE_NAME, BSON_OBJECT_ID, MONGODB_SET_OPERATOR, MONGODB_UNKNOWN_ID
 
 
 class MongoDB:
@@ -41,7 +41,7 @@ class MongoDB:
         result = self.collection.find_one(query)
         
         if result:
-            self.logger.debug(f"Found document in {self.collection_name}: {result.get('_id', 'unknown_id')}")
+            self.logger.debug(f"Found document in {self.collection_name}: {result.get(BSON_OBJECT_ID, MONGODB_UNKNOWN_ID)}")
         else:
             self.logger.debug(f"No document found in {self.collection_name} matching query: {query}")
             
@@ -70,7 +70,7 @@ class MongoDB:
 
     def update(self, query, updated_values):
         self.logger.debug(f"Updating document in {self.collection_name} with query: {query}")
-        new_values = {"$set": updated_values}
+        new_values = {MONGODB_SET_OPERATOR: updated_values}
 
         result = self.collection.update_one(query, new_values)
 

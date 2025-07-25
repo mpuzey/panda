@@ -12,6 +12,7 @@ from constants import (
     INVALID_DATE_FORMAT_ERROR_TEXT,
     INVALID_DATE_OF_BIRTH_ERROR_TEXT,
     INVALID_NHS_NUMBER_ERROR_TEXT,
+    INVALID_NHS_NUMBER_CHECKSUM_ERROR_TEXT,
     INVALID_NAME_ERROR_TEXT,
     INVALID_UK_POSTCODE_ERROR_TEXT
 )
@@ -27,19 +28,19 @@ def validate(patient):
         return errors
 
     # Validate NHS number format and checksum
-    nhs_number = patient.get('nhs_number', '')
+    nhs_number = patient.get(PATIENT_FIELD_NHS_NUMBER, '')
     if not re.match(NHS_NUMBER_REGEX, nhs_number):
         errors.append(INVALID_NHS_NUMBER_ERROR_TEXT)
     elif not validate_nhs_number_checksum(nhs_number):
-        errors.append('Invalid NHS number checksum')
+        errors.append(INVALID_NHS_NUMBER_CHECKSUM_ERROR_TEXT)
 
-    errors += check_min_length(patient['name'], 3, INVALID_NAME_ERROR_TEXT)
+    errors += check_min_length(patient[PATIENT_FIELD_NAME], 3, INVALID_NAME_ERROR_TEXT)
     errors += check_date_format(
-        patient['date_of_birth'], DATE_FORMAT,
+        patient[PATIENT_FIELD_DATE_OF_BIRTH], DATE_FORMAT,
         INVALID_DATE_FORMAT_ERROR_TEXT,
         INVALID_DATE_OF_BIRTH_ERROR_TEXT
     )
-    errors += validate_postcode(patient['postcode'])
+    errors += validate_postcode(patient[PATIENT_FIELD_POSTCODE])
 
     if errors:
         print('Invalid patient:', errors)

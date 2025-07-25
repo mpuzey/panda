@@ -1,7 +1,8 @@
 from src.api.base_handler import BaseHandler
 from src.service.patient_service import PatientService
 from constants import (
-    PANDA_RESPONSE_FIELD_PATIENTS
+    PANDA_RESPONSE_FIELD_PATIENTS,
+    HTTP_200_OK
 )
 
 
@@ -17,5 +18,5 @@ class PatientsHandler(BaseHandler):
     def get(self):
         service_response = self.patient_service.get_all_patients()
 
-        self.set_status(200)
+        self.set_status(HTTP_200_OK)
         self.write({PANDA_RESPONSE_FIELD_PATIENTS: service_response.data})

@@ -28,6 +28,7 @@ from constants import (
     INVALID_DEPARTMENT_ERROR_TEXT,
     MISSING_POSTCODE_ERROR_TEXT,
     INVALID_UK_POSTCODE_ERROR_TEXT,
+    INVALID_NHS_NUMBER_CHECKSUM_PATIENT_ERROR_TEXT,
 )
 from src.service.validation_utils import check_required_fields, check_regex, check_min_length, check_date_format, validate_nhs_number_checksum
 
@@ -82,7 +83,7 @@ def validate_personnel(appointment, errors):
         if not re.match(NHS_NUMBER_REGEX, patient_nhs_number):
             errors.append(INVALID_PATIENT_ID_ERROR_TEXT)
         elif not validate_nhs_number_checksum(patient_nhs_number):
-            errors.append('Invalid NHS number checksum for patient')
+            errors.append(INVALID_NHS_NUMBER_CHECKSUM_PATIENT_ERROR_TEXT)
 
     if APPOINTMENT_FIELD_CLINICIAN in appointment:
         errors += check_min_length(appointment[APPOINTMENT_FIELD_CLINICIAN], 3, INVALID_CLINICIAN_ERROR_TEXT)
